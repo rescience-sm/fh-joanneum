@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FH JOANNEUM | Smart Lecture Companion</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            fhred: '#C8102E',
+            fhdark: '#262A2E',
+            fhgray: '#696E73',
+            vlightgray: '#F2F3F5',
+            accentblue: '#195FA5',
+            accentteal: '#00877D',
+            accentamber: '#D27D0A',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom Industrial Touch Sliders & Animations */
+    body {
+      background-color: #F2F3F5;
+      color: #262A2E;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: contain;
+    }
+
+    input[type="range"].industrial-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #E2E5E9;
+      outline: none;
+    }
+
+    input[type="range"].industrial-slider.slider-blue::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #195FA5;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.28);
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+
+    input[type="range"].industrial-slider.slider-teal::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #00877D;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.28);
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+
+    input[type="range"].industrial-slider::-webkit-slider-thumb:active {
+      transform: scale(1.15);
+    }
+
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .animate-shake {
+      animation: shakeError 0.35s ease-in-out;
+    }
+
+    /* Hide native password reveal icons in Edge/IE so zero hints appear */
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+
+    /* Hide horizontal scrollbar on swipeable app carousel */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-fhred selection:text-white">
+
+  <!-- ===================================================================== -->
+  <!-- TOAST NOTIFICATION CONTAINER (Replaces alert/confirm)                 -->
+  <!-- ===================================================================== -->
+  <div id="toastContainer" class="fixed top-4 right-4 left-4 sm:left-auto sm:w-96 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 1: ZERO-HINT AUTHENTICATION LANDING GATE                         -->
+  <!-- ===================================================================== -->
+  <main id="authScreen" class="flex-1 flex items-center justify-center p-4 bg-gradient-to-br from-fhdark via-[#1d2024] to-[#121417]">
+    <div id="authCard" class="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-white/10">
+      <!-- Top Corporate Accent Bar -->
+      <div class="h-2 w-full bg-fhred"></div>
+
+      <div class="p-7 sm:p-8">
+        <!-- Pure SVG FH | JOANNEUM Logo matching Beamer TikZ vector -->
+        <div class="mb-6">
+          <div class="flex items-center gap-2.5">
+            <div class="w-2.5 h-8 bg-fhred rounded-sm"></div>
+            <span class="text-2xl font-extrabold tracking-tight text-fhdark">FH</span>
+            <div class="w-0.5 h-8 bg-fhred"></div>
+            <span class="text-2xl font-extrabold tracking-tight text-fhdark">JOANNEUM</span>
+          </div>
+          <p class="text-xs font-medium text-fhgray mt-1 pl-5">University of Applied Sciences</p>
+          <div class="h-px bg-gray-200 w-full mt-3"></div>
+        </div>
+
+        <!-- Lecture Identification -->
+        <div class="mb-6 bg-vlightgray rounded-xl p-4 border-l-4 border-fhred">
+          <p class="text-xs font-bold uppercase tracking-wider text-fhred mb-1">Interactive Lecture Suite</p>
+          <h1 class="text-base sm:text-lg font-bold text-fhdark leading-snug">
+            Advanced Digital &amp; Bio-Intelligent Manufacturing
+          </h1>
+          <p class="text-xs text-fhgray mt-1.5 font-medium">Prof. Sven Maričić &bull; Industrial &amp; Production Engineering</p>
+        </div>
+
+        <!-- Strict Zero-Hint Password Form -->
+        <form id="loginForm" autocomplete="off" novalidate class="space-y-4">
+          <!-- Decoy hidden input to suppress browser password managers -->
+          <input type="text" name="prevent_autofill" id="prevent_autofill" value="" class="hidden" tabindex="-1" aria-hidden="true" />
+          
+          <div>
+            <label for="accessInput" class="block text-xs font-bold uppercase tracking-wider text-fhdark mb-2">
+              Lecture Access Key
+            </label>
+            <input
+              id="accessInput"
+              name="lecture_token_x9"
+              type="password"
+              inputmode="text"
+              autocomplete="new-password"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              data-lpignore="true"
+              data-1p-ignore="true"
+              data-form-type="other"
+              required
+              class="w-full px-4 py-3.5 rounded-xl bg-vlightgray border-2 border-gray-200 text-fhdark font-mono text-base focus:outline-none focus:border-fhred focus:bg-white transition"
+            />
+          </div>
+
+          <p id="loginError" class="hidden text-xs font-semibold text-fhred bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            Invalid access key. Authorization denied.
+          </p>
+
+          <button
+            type="submit"
+            class="w-full py-3.5 px-5 rounded-xl bg-fhred hover:bg-[#a90d26] active:scale-[0.99] text-white font-bold text-sm tracking-wide shadow-lg shadow-fhred/25 transition flex items-center justify-center gap-2"
+          >
+            <span>Enter Smart Lecture Lab</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 2: AUTHENTICATED SMART LECTURE APPLICATION                       -->
+  <!-- ===================================================================== -->
+  <div id="appWorkspace" class="hidden flex-1 flex flex-col min-h-screen">
+    
+    <!-- Top Sticky Navigation Header -->
+    <header class="sticky top-0 z-30 bg-fhdark text-white shadow-md border-b border-white/10">
+      <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <div class="w-2 h-6 bg-fhred rounded-xs"></div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-extrabold text-sm tracking-tight">FH | JOANNEUM</span>
+              <span class="hidden sm:inline-block text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-fhred text-white">Live Mobile Lab</span>
+            </div>
+            <p class="text-[11px] text-gray-300 leading-none mt-0.5">Prof. Sven Maričić &bull; Mobile Extension</p>
+          </div>
+        </div>
+
+        <!-- Carousel Counter & Session Lock -->
+        <div class="flex items-center gap-2">
+          <span id="headerSlideIndicator" class="text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg bg-black/35 text-gray-200">
+            App 1 / 4
+          </span>
+          <button
+            onclick="logoutSession()"
+            title="Lock Session"
+            class="p-2 rounded-lg bg-black/30 text-gray-300 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5 text-xs font-semibold"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span class="hidden sm:inline">Lock</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- =================================================================== -->
+    <!-- 4-PLACE SWIPEABLE APP LAUNCHER CAROUSEL                             -->
+    <!-- =================================================================== -->
+    <div class="bg-white border-b border-gray-200 shadow-xs">
+      <div class="max-w-6xl mx-auto px-3 sm:px-6 py-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-fhgray">
+            Lecture App Carousel (Swipe or Tap)
+          </span>
+          <div class="flex items-center gap-1.5">
+            <!-- Carousel Pagination Dots -->
+            <div class="flex items-center gap-1 mr-2">
+              <button onclick="selectCarouselIndex(0)" id="carDot0" class="w-5 h-1.5 rounded-full bg-fhred transition-all" aria-label="App 1"></button>
+              <button onclick="selectCarouselIndex(1)" id="carDot1" class="w-2 h-1.5 rounded-full bg-gray-300 transition-all" aria-label="App 2"></button>
+              <button onclick="selectCarouselIndex(2)" id="carDot2" class="w-2 h-1.5 rounded-full bg-gray-300 transition-all" aria-label="App 3"></button>
+              <button onclick="selectCarouselIndex(3)" id="carDot3" class="w-2 h-1.5 rounded-full bg-gray-300 transition-all" aria-label="App 4"></button>
+            </div>
+            <button onclick="stepCarousel(-1)" class="p-1.5 rounded-lg bg-vlightgray hover:bg-gray-200 text-fhdark transition" aria-label="Previous App">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button onclick="stepCarousel(1)" class="p-1.5 rounded-lg bg-vlightgray hover:bg-gray-200 text-fhdark transition" aria-label="Next App">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Horizontal Snap Track (4 App Places) -->
+        <div id="carouselTrack" class="flex gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth pb-1">
+          <!-- Place 1: CNC WebTwin -->
+          <button
+            id="carCard0"
+            onclick="selectCarouselIndex(0)"
+            class="snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[24%] text-left p-3 rounded-xl border-2 border-accentblue bg-blue-50/60 transition flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded bg-accentblue text-white">01 &bull; LIVE</span>
+              <span class="text-[10px] font-bold text-fhgray">Sec. 4 &bull; IMS</span>
+            </div>
+            <p class="text-xs sm:text-sm font-extrabold text-fhdark truncate">CNC WebTwin &amp; Poka-Yoke</p>
+            <p class="text-[11px] text-fhgray truncate mt-0.5">2.5D DRO, P_c(t) &amp; IMU Chatter</p>
+          </button>
+
+          <!-- Place 2: SMA + Blocktrust -->
+          <button
+            id="carCard1"
+            onclick="selectCarouselIndex(1)"
+            class="snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[24%] text-left p-3 rounded-xl border-2 border-gray-200 bg-vlightgray/70 hover:bg-white transition flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded bg-accentteal text-white">02 &bull; LIVE</span>
+              <span class="text-[10px] font-bold text-fhgray">Sec. 2 &amp; 3</span>
+            </div>
+            <p class="text-xs sm:text-sm font-extrabold text-fhdark truncate">SMA Bionic &amp; Blocktrust</p>
+            <p class="text-[11px] text-fhgray truncate mt-0.5">Physarum AM + SHA-256 DLT</p>
+          </button>
+
+          <!-- Place 3: Proposed Slot A -->
+          <button
+            id="carCard2"
+            onclick="selectCarouselIndex(2)"
+            class="snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[24%] text-left p-3 rounded-xl border-2 border-dashed border-amber-400/80 bg-amber-50/40 hover:bg-amber-50/80 transition flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded bg-accentamber text-white">03 &bull; SLOT</span>
+              <span class="text-[10px] font-bold text-fhgray">Sec. 5 &bull; SOTA</span>
+            </div>
+            <p class="text-xs sm:text-sm font-extrabold text-fhdark truncate">PDEVS Eco-DLT Simulator</p>
+            <p class="text-[11px] text-fhgray truncate mt-0.5">Storage (-79%) &amp; kWh Calculator</p>
+          </button>
+
+          <!-- Place 4: Proposed Slot B -->
+          <button
+            id="carCard3"
+            onclick="selectCarouselIndex(3)"
+            class="snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[24%] text-left p-3 rounded-xl border-2 border-dashed border-fhred/60 bg-red-50/40 hover:bg-red-50/80 transition flex flex-col justify-between"
+          >
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <span class="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded bg-fhred text-white">04 &bull; SLOT</span>
+              <span class="text-[10px] font-bold text-fhgray">Sec. 6 &bull; VET/UAV</span>
+            </div>
+            <p class="text-xs sm:text-sm font-extrabold text-fhdark truncate">3D4VR &amp; UAV Gyro Twin</p>
+            <p class="text-[11px] text-fhgray truncate mt-0.5">Phone Gyroscope 3D Inspector</p>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6">
+
+      <!-- ================================================================= -->
+      <!-- MODULE 1: CNC WEBTWIN & POKA-YOKE MOBILE HMI (Sec. 4)             -->
+      <!-- ================================================================= -->
+      <section id="moduleCNC" class="space-y-4">
+        <!-- Context Banner -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-blue-100 text-accentblue">Section 4 &bull; IMS</span>
+              <span id="cncStateBadge" class="px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-emerald-100 text-accentteal">ONLINE &bull; 30 Hz SYNC</span>
+            </div>
+            <h2 class="text-base sm:text-lg font-extrabold text-fhdark mt-1">Interactive Mobile HMI: CNC WebTwin &amp; Poka-Yoke</h2>
+            <p class="text-xs text-fhgray">Real-time 2.5D G-code pocket interpolation, cutting power <span class="font-mono">P_c(t)</span> telemetry, smartphone accelerometer chatter sensing, and safe <span class="font-mono">Z</span>-retraction.</p>
+          </div>
+          <!-- Mobile Sub-Screen Switcher (Visible on small phones to toggle Screen A / B or View Both) -->
+          <div class="flex sm:hidden bg-vlightgray p-1 rounded-xl self-start">
+            <button id="subTabBoth" onclick="setCncMobileView('both')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-fhdark text-white">Split</button>
+            <button id="subTabA" onclick="setCncMobileView('a')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold text-fhgray">(a) DRO</button>
+            <button id="subTabB" onclick="setCncMobileView('b')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold text-fhgray">(b) Controls</button>
+          </div>
+        </div>
+
+        <!-- Dual Smartphone HMI Grid matching Lecture Slide Mockup -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+
+          <!-- PHONE SCREEN (a): Live Toolpath & Digital Readout (DRO) -->
+          <div id="cncPanelA" class="bg-fhdark rounded-[28px] p-3 shadow-xl border-4 border-[#383d42]">
+            <!-- Speaker Notch -->
+            <div class="w-20 h-1.5 bg-black/50 rounded-full mx-auto mb-2.5"></div>
+            
+            <div class="bg-vlightgray rounded-[20px] overflow-hidden">
+              <!-- Top App Bar -->
+              <div class="bg-accentblue px-4 py-2.5 flex items-center justify-between text-white">
+                <span class="font-bold text-sm tracking-wide">CNC WebTwin</span>
+                <span id="droStatusPill" class="px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-accentteal tracking-wider">ONLINE</span>
+              </div>
+
+              <div class="p-3.5 space-y-3">
+                <!-- DRO Coordinates Card -->
+                <div class="bg-white rounded-xl p-3 border border-gray-200 shadow-xs font-mono text-xs sm:text-sm">
+                  <div class="flex justify-between items-center">
+                    <span class="font-bold text-fhdark">X: <span id="droX">+000.00</span> mm</span>
+                    <span class="font-bold text-fhdark">S: <span id="droS">8500</span> <span class="text-[10px] text-fhgray">RPM</span></span>
+                  </div>
+                  <div class="flex justify-between items-center mt-1.5">
+                    <span class="font-bold text-fhdark">Y: <span id="droY">+000.00</span> mm</span>
+                    <span class="font-bold text-fhdark">F: <span id="droF">850</span></span>
+                    <span id="droZWrap" class="font-extrabold text-fhred">Z: <span id="droZ">-6.0</span></span>
+                  </div>
+                </div>
+
+                <!-- 2.5D XY Pocket Viewport Canvas -->
+                <div class="relative rounded-xl overflow-hidden border-2 border-fhdark bg-[#1D2024] aspect-[4/3]">
+                  <canvas id="toolpathCanvas" class="w-full h-full block"></canvas>
+                  <div class="absolute bottom-2 left-3 right-3 flex items-center justify-between pointer-events-none text-[11px] text-white/90 font-medium">
+                    <span class="bg-black/55 px-2 py-0.5 rounded">View: XY Pocket | D=10mm</span>
+                    <span id="mrrReadout" class="bg-black/55 px-2 py-0.5 rounded font-mono text-emerald-300">MRR: 25.5 cm³/min</span>
+                  </div>
+                </div>
+
+                <!-- Active G-Code Block & Progress -->
+                <div class="bg-white rounded-xl p-3 border border-gray-200 shadow-xs">
+                  <div class="flex items-center justify-between font-mono text-xs text-fhdark mb-2">
+                    <span id="gcodeLineText" class="font-bold truncate">N0010 G00 X20.0 Y85.0 Z5.0</span>
+                    <span id="gcodePctText" class="text-accentblue font-bold ml-2">0%</span>
+                  </div>
+                  <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                    <div id="gcodeProgressBar" class="h-full bg-accentblue rounded-full transition-all duration-100" style="width: 0%"></div>
+                  </div>
+                </div>
+
+                <p class="text-center text-xs font-bold text-fhdark pt-0.5">(a) Live Toolpath &amp; DRO</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- PHONE SCREEN (b): Spindle Telemetry, Poka-Yoke Overrides & E-Stop -->
+          <div id="cncPanelB" class="bg-fhdark rounded-[28px] p-3 shadow-xl border-4 border-[#383d42]">
+            <!-- Speaker Notch -->
+            <div class="w-20 h-1.5 bg-black/50 rounded-full mx-auto mb-2.5"></div>
+
+            <div class="bg-vlightgray rounded-[20px] overflow-hidden">
+              <!-- Top App Bar -->
+              <div class="bg-[#3A3F45] px-4 py-2.5 flex items-center justify-between text-white">
+                <span class="font-bold text-sm tracking-wide">Spindle &amp; Overrides</span>
+                <button
+                  id="motionBtn"
+                  onclick="toggleMotionSensor()"
+                  class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-white/15 hover:bg-white/25 transition flex items-center gap-1"
+                >
+                  <span>📳 Phone IMU:</span>
+                  <span id="imuStatusText">Sim</span>
+                </button>
+              </div>
+
+              <div class="p-3.5 space-y-3">
+                <!-- Dual Semi-Circular KPI Gauges -->
+                <div class="bg-white rounded-xl p-3 border border-gray-200 shadow-xs grid grid-cols-2 gap-2">
+                  <!-- Gauge 1: Spindle Power & Load -->
+                  <div class="flex flex-col items-center">
+                    <svg viewBox="0 0 120 70" class="w-28 h-16 overflow-visible">
+                      <path d="M 15 58 A 45 45 0 0 1 105 58" fill="none" stroke="#E5E7EB" stroke-width="11" stroke-linecap="round"/>
+                      <path id="gaugePowerArc" d="M 15 58 A 45 45 0 0 1 105 58" fill="none" stroke="#00877D" stroke-width="11" stroke-linecap="round" stroke-dasharray="141.37" stroke-dashoffset="50"/>
+                      <text id="gaugeKwText" x="60" y="52" text-anchor="middle" class="font-sans font-extrabold text-[15px] fill-fhdark">4.8 kW</text>
+                    </svg>
+                    <span id="gaugeLoadSub" class="text-xs font-semibold text-fhgray -mt-1">Load 64%</span>
+                  </div>
+
+                  <!-- Gauge 2: RMS Vibration -->
+                  <div class="flex flex-col items-center">
+                    <svg viewBox="0 0 120 70" class="w-28 h-16 overflow-visible">
+                      <path d="M 15 58 A 45 45 0 0 1 105 58" fill="none" stroke="#E5E7EB" stroke-width="11" stroke-linecap="round"/>
+                      <path id="gaugeVibArc" d="M 15 58 A 45 45 0 0 1 105 58" fill="none" stroke="#D27D0A" stroke-width="11" stroke-linecap="round" stroke-dasharray="141.37" stroke-dashoffset="105"/>
+                      <text id="gaugeVibText" x="60" y="52" text-anchor="middle" class="font-sans font-extrabold text-[15px] fill-fhdark">0.18 g</text>
+                    </svg>
+                    <div class="flex items-center gap-1.5 -mt-1">
+                      <span id="gaugeVibSub" class="text-xs font-semibold text-fhgray">Vib. OK</span>
+                      <button onclick="injectChatterPulse()" class="text-[10px] px-1.5 py-0.5 bg-amber-100 text-accentamber font-bold rounded hover:bg-amber-200 transition" title="Inject chatter shock">Bump</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Real-Time Cutting Power Sparkline P_c(t) -->
+                <div class="bg-white rounded-xl p-3 border border-gray-200 shadow-xs">
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold text-fhdark">Spindle Power <span class="font-serif italic">P</span><sub>c</sub>(<span class="font-serif italic">t</span>)</span>
+                    <span class="text-[10px] font-mono text-fhred font-semibold">Limit P_max = 6.2 kW</span>
+                  </div>
+                  <div class="h-20 w-full">
+                    <canvas id="sparklineCanvas" class="w-full h-full block"></canvas>
+                  </div>
+                </div>
+
+                <!-- Touch Override Sliders with Poka-Yoke Interlock -->
+                <div class="bg-white rounded-xl p-3 border border-gray-200 shadow-xs space-y-3">
+                  <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+                    <div class="flex items-center gap-1.5">
+                      <span class="inline-block w-2 h-2 rounded-full bg-accentteal" id="pokaDot"></span>
+                      <span class="text-[11px] font-bold text-fhdark">Poka-Yoke Soft-Limit Guard (50–120%)</span>
+                    </div>
+                    <button
+                      id="pokaToggleBtn"
+                      onclick="togglePokaYoke()"
+                      class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-accentteal hover:opacity-80 transition"
+                    >
+                      LOCKED ON
+                    </button>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs font-bold text-fhdark mb-1.5">
+                      <span>Feed Override: <span id="feedPctVal" class="text-accentblue font-mono">100%</span></span>
+                      <span class="text-[11px] font-mono text-fhgray" id="feedRangeHint">[50–120%]</span>
+                    </div>
+                    <input id="feedSlider" type="range" min="50" max="120" value="100" class="industrial-slider slider-blue" oninput="updateOverrides()" />
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs font-bold text-fhdark mb-1.5">
+                      <span>Spindle Speed: <span id="spindlePctVal" class="text-accentteal font-mono">105%</span></span>
+                      <span class="text-[11px] font-mono text-fhgray">[60–120%]</span>
+                    </div>
+                    <input id="spindleSlider" type="range" min="60" max="120" value="105" class="industrial-slider slider-teal" oninput="updateOverrides()" />
+                  </div>
+                </div>
+
+                <!-- Instant Actuation Buttons: START / HOLD / E-STOP -->
+                <div class="grid grid-cols-3 gap-2.5 pt-0.5">
+                  <button
+                    onclick="cncCommand('START')"
+                    class="py-3.5 rounded-xl bg-accentteal hover:bg-[#007067] active:scale-95 text-white font-extrabold text-xs tracking-wider shadow-md transition"
+                  >
+                    START
+                  </button>
+                  <button
+                    onclick="cncCommand('HOLD')"
+                    class="py-3.5 rounded-xl bg-accentamber hover:bg-[#b86c08] active:scale-95 text-white font-extrabold text-xs tracking-wider shadow-md transition"
+                  >
+                    HOLD
+                  </button>
+                  <button
+                    onclick="cncCommand('ESTOP')"
+                    class="py-3.5 rounded-xl bg-fhred hover:bg-[#a60c25] active:scale-95 text-white font-extrabold text-xs tracking-wider shadow-md transition ring-2 ring-fhred/30"
+                  >
+                    E-STOP
+                  </button>
+                </div>
+
+                <p class="text-center text-xs font-bold text-fhdark pt-0.5">(b) Telemetry &amp; Controls</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Priority WebSocket Frame Console -->
+        <div class="bg-fhdark text-gray-200 rounded-2xl p-3.5 shadow-sm font-mono text-xs">
+          <div class="flex items-center justify-between mb-1.5 text-[11px] text-gray-400">
+            <span>Node-RED / Edge WSS Telemetry Frame Stream</span>
+            <button onclick="resetCncCycle()" class="text-amber-400 hover:underline font-sans font-semibold">Reset Part Cycle</button>
+          </div>
+          <div id="wsFrameLog" class="bg-black/40 rounded-lg px-3 py-2 text-[11px] text-emerald-400 overflow-x-auto whitespace-nowrap">
+            {"cmd":"SYNC","pose":{"x":20.0,"y":85.0,"z":5.0},"S":8925,"F":850,"Pc_kW":0.00,"mode":"RUN"}
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- MODULE 2: SMA BIONIC TOPOLOGY & BLOCKTRUST LEDGER (Sec. 2 & 3)    -->
+      <!-- ================================================================= -->
+      <section id="moduleSMA" class="hidden space-y-5">
+        <!-- Context Banner -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-emerald-100 text-accentteal">Section 3 &bull; BMS &amp; Slime Mould Algorithm</span>
+            <span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-red-100 text-fhred">Section 2 &bull; Blocktrust DLT</span>
+          </div>
+          <h2 class="text-base sm:text-lg font-extrabold text-fhdark mt-1">Bio-Inspired SMA Topology Synthesis &amp; Blocktrust Ledger</h2>
+          <p class="text-xs text-fhgray">Tap the design envelope to place structural supports and forces. Watch <em>Physarum polycephalum</em> venous oscillation prune weak paths into a lightweight bionic AM frame, then anchor its cryptographic Digital Product Passport on-chain.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          
+          <!-- LEFT COLUMN: Interactive Slime Mould Bionic Canvas (7 cols) -->
+          <div class="lg:col-span-7 bg-white rounded-2xl p-4 shadow-sm border border-gray-200 space-y-3.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5 bg-vlightgray p-1 rounded-xl">
+                <button id="nodeToolLoad" onclick="setNodeTool('load')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-fhred text-white transition">
+                  + Add Load (F)
+                </button>
+                <button id="nodeToolSupport" onclick="setNodeTool('support')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-fhdark hover:bg-white transition">
+                  + Add Anchor
+                </button>
+              </div>
+
+              <!-- Lecture Case Presets -->
+              <div class="flex items-center gap-1.5">
+                <select id="smaPresetSelect" onchange="loadSmaPreset(this.value)" class="text-xs font-bold bg-vlightgray border border-gray-300 rounded-xl px-3 py-2 text-fhdark focus:outline-none">
+                  <option value="pix">Preset: PIX Moving WAAM Chassis</option>
+                  <option value="uav">Preset: UAV Quad Frame (-22% Mass)</option>
+                  <option value="airbus">Preset: Aerospace Bionic Bracket</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Interactive Bionic Morphogenesis Canvas -->
+            <div class="relative rounded-2xl overflow-hidden bg-[#181B1F] border-2 border-fhdark aspect-[16/10] touch-none">
+              <canvas id="smaCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+              <div class="absolute top-2.5 left-3 right-3 flex justify-between items-center pointer-events-none text-[11px]">
+                <span class="bg-black/60 text-amber-300 px-2.5 py-1 rounded-lg font-mono">
+                  Iter t=<span id="smaIterText">0</span> | W-Oscillator Active
+                </span>
+                <span class="bg-black/60 text-white/80 px-2.5 py-1 rounded-lg">
+                  Tap canvas to add nodes
+                </span>
+              </div>
+            </div>
+
+            <!-- Live Engineering Optimization KPIs -->
+            <div class="grid grid-cols-3 gap-2.5 text-center">
+              <div class="bg-vlightgray rounded-xl p-2.5">
+                <p class="text-[10px] font-bold uppercase text-fhgray">Mass Reduction</p>
+                <p id="smaMassSaved" class="text-base sm:text-lg font-extrabold text-accentteal font-mono">-58.4%</p>
+              </div>
+              <div class="bg-vlightgray rounded-xl p-2.5">
+                <p class="text-[10px] font-bold uppercase text-fhgray">Safety Factor</p>
+                <p id="smaSafetyFactor" class="text-base sm:text-lg font-extrabold text-accentblue font-mono">3.08</p>
+              </div>
+              <div class="bg-vlightgray rounded-xl p-2.5">
+                <p class="text-[10px] font-bold uppercase text-fhgray">Active Veins</p>
+                <p id="smaVeinCount" class="text-base sm:text-lg font-extrabold text-fhdark font-mono">14</p>
+              </div>
+            </div>
+
+            <!-- Pruning & Mint Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <div class="flex-1 min-w-[180px]">
+                <div class="flex justify-between text-xs font-bold text-fhdark mb-1">
+                  <span>Bio-Pruning Threshold (<span class="font-serif italic">z</span>)</span>
+                  <span id="smaPruneVal" class="font-mono text-accentamber">0.35</span>
+                </div>
+                <input id="smaPruneSlider" type="range" min="15" max="65" value="35" class="industrial-slider slider-teal" oninput="updateSmaPruning()" />
+              </div>
+
+              <button
+                onclick="mintBionicPassport()"
+                class="px-4 py-3 rounded-xl bg-fhdark hover:bg-black active:scale-95 text-white font-bold text-xs shadow-md transition flex items-center gap-2"
+              >
+                <span>⛓️ Anchor Part to Blocktrust</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Blocktrust Cryptographic Ledger (5 cols) -->
+          <div class="lg:col-span-5 bg-white rounded-2xl p-4 shadow-sm border border-gray-200 space-y-3.5">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-extrabold text-fhdark">Blocktrust Digital Thread</h3>
+                <p class="text-[11px] text-fhgray">SHA-256 Permissioned MultiChain Stream</p>
+              </div>
+              <span id="chainIntegrityBadge" class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-emerald-100 text-accentteal">
+                ✓ CHAIN VALID
+              </span>
+            </div>
+
+            <!-- Formula Callout from Slide 12 -->
+            <div class="bg-vlightgray rounded-xl px-3 py-2 font-mono text-[11px] text-fhdark border-l-4 border-accentblue">
+              B<sub>k</sub> = SHA256(B<sub>k-1</sub> || H(CAD) || H(Mat) || H(QA) || &tau;<sub>k</sub>)
+            </div>
+
+            <!-- Blocks List -->
+            <div id="ledgerContainer" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1"></div>
+
+            <div class="pt-1 flex items-center justify-between text-[11px] text-fhgray border-t border-gray-100">
+              <span>Tap <strong>Tamper QA</strong> on any block to test counterfeit detection.</span>
+              <button onclick="restoreLedgerConsensus()" class="font-bold text-accentblue hover:underline ml-2 shrink-0">Repair Consensus</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- MODULE 3 (CAROUSEL SLOT 3): PDEVS ECO-BLOCKCHAIN SIMULATOR        -->
+      <!-- ================================================================= -->
+      <section id="moduleSlot3" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border-2 border-dashed border-accentamber/60">
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-amber-100 text-accentamber">Carousel Place 03 &bull; Ready for Coding</span>
+            <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded bg-vlightgray text-fhdark">Section 5 (SOTA 3/5) &bull; Mullet et al. (2026)</span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-extrabold text-fhdark">Suggested App 3: PDEVS Green Blockchain &amp; Factory Traceability Calculator</h2>
+          <p class="text-xs sm:text-sm text-fhgray mt-1.5 max-w-3xl">
+            Turns Slide 29 into an interactive sustainability sandbox on students' phones—allowing live trade-off testing between <strong>On-Chain vs. Off-Chain Delta Storage</strong> and <strong>PoW vs. Permissioned Round-Robin Consensus</strong> before physical deployment.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mt-5">
+            <div class="bg-vlightgray rounded-xl p-4 border-l-4 border-accentteal">
+              <p class="text-[11px] font-bold uppercase text-fhgray">Off-Chain Delta Model</p>
+              <p class="font-mono text-xs font-bold text-fhdark mt-1">V_o = unit_size &middot; qty &middot; diff_rate</p>
+              <p class="text-xs text-accentteal font-semibold mt-1.5">74.36 GB &rarr; 15.60 GB (-79%)</p>
+            </div>
+            <div class="bg-vlightgray rounded-xl p-4 border-l-4 border-accentblue">
+              <p class="text-[11px] font-bold uppercase text-fhgray">Consensus Energy Model</p>
+              <p class="font-mono text-xs font-bold text-fhdark mt-1">PoW vs. Round-Robin (nPoW)</p>
+              <p class="text-xs text-accentblue font-semibold mt-1.5">1.71 kWh &rarr; 0.27 kWh (&gt;5.3&times; less)</p>
+            </div>
+            <div class="bg-vlightgray rounded-xl p-4 border-l-4 border-accentamber">
+              <p class="text-[11px] font-bold uppercase text-fhgray">Student Phone Role</p>
+              <p class="text-xs font-bold text-fhdark mt-1">Interactive Parameter Sliders</p>
+              <p class="text-xs text-fhgray mt-1">Tune PO batch rate, CPU TDP &amp; file diff % to hit SME 5.0 carbon targets.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- MODULE 4 (CAROUSEL SLOT 4): 3D4VR & UAV GYRO DIGITAL TWIN         -->
+      <!-- ================================================================= -->
+      <section id="moduleSlot4" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border-2 border-dashed border-fhred/60">
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-red-100 text-fhred">Carousel Place 04 &bull; Ready for Coding</span>
+            <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded bg-vlightgray text-fhdark">Section 6 &bull; DYNAMIC Holcim &amp; UAV Generative Design</span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-extrabold text-fhdark">Suggested App 4: 3D Gyroscope Digital Twin (UAV Frame &amp; Holcim Plant)</h2>
+          <p class="text-xs sm:text-sm text-fhgray mt-1.5 max-w-3xl">
+            Uses the smartphone's <strong>3-axis gyroscope</strong> (and touch orbit) so students can tilt their phone in class to inspect your <strong>Generative UAV Quadrotor Frame</strong> stress hotspots and explore the <strong>Holcim Koromačno</strong> rotary kiln &amp; robotic palletizer twin.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mt-5">
+            <div class="bg-vlightgray rounded-xl p-4 border-l-4 border-fhred">
+              <p class="text-[11px] font-bold uppercase text-fhgray">UAV Generative Frame</p>
+              <p class="font-mono text-xs font-bold text-fhdark mt-1">F1 = 70 N &bull; F2 = 20 N &bull; 0.58 m</p>
+              <p class="text-xs text-fhred font-semibold mt-1.5">750 g &rarr; 586 g (-22% | SF = 3.026)</p>
+            </div>
+            <div class="bg-vlightgray rounded-xl p-4 border-l-4 border-accentblue">
+              <p class="text-[11px] font-bold uppercase text-fhgray">DYNAMIC Dual VET Twin</p>
+              <p class="font-mono text-xs font-bold text-fhdark mt-1">Silos &rarr; Kiln &rarr; Mill &rarr; Robot</p>
+              <p class="text-xs text-accentblue font-semibold mt-1.5">Interactive station KPI &amp; Kaizen cards</p>
+            </div>
+            <div class="bg-vlightgray rounded-xl p-4 border-l-4 border-accentteal">
+              <p class="text-[11px] font-bold uppercase text-fhgray">Student Phone Role</p>
+              <p class="text-xs font-bold text-fhdark mt-1">Live Spatial Orientation Controller</p>
+              <p class="text-xs text-fhgray mt-1">Tilt phone in 3D space to inspect FEM stress (&sigma; = 6.608 MPa) &amp; plant nodes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION LOGIC (Pure Self-Contained ES6 JavaScript)                -->
+  <!-- ===================================================================== -->
+  <script>
+    /* ---------------------------------------------------------------------
+     * 0. UI TOAST HELPER (No alert() or confirm() used anywhere)
+     * --------------------------------------------------------------------- */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const colors = {
+        info: 'bg-fhdark text-white border-accentblue',
+        success: 'bg-accentteal text-white border-emerald-300',
+        warn: 'bg-accentamber text-white border-amber-200',
+        danger: 'bg-fhred text-white border-red-200'
+      };
+      const el = document.createElement('div');
+      el.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-lg border-l-4 text-xs font-bold transition-all duration-300 transform translate-y-0 opacity-100 ${colors[type] || colors.info}`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-8px)';
+        setTimeout(() => el.remove(), 300);
+      }, 3200);
+    }
+
+    /* ---------------------------------------------------------------------
+     * 1. ZERO-HINT DYNAMIC CURRENT DATE AUTHENTICATION
+     *    Accepts DD-MM, MM-DD, and 4-digit PINs (DDMM / MMDD) with
+     *    instant auto-login and zero hints or suggestions.
+     * --------------------------------------------------------------------- */
+    let isAuthenticated = false;
+
+    function getValidDatePasswords() {
+      const now = new Date();
+      const m = String(now.getMonth() + 1);
+      const mm = m.padStart(2, '0');
+      const d = String(now.getDate());
+      const dd = d.padStart(2, '0');
+
+      // Instant auto-login triggers: 4-digit PINs (DDMM / MMDD) and DD-MM / MM-DD
+      const autoTriggerSet = new Set([
+        `${dd}${mm}`,
+        `${mm}${dd}`,
+        `${dd}-${mm}`,
+        `${mm}-${dd}`,
+        `${dd}.${mm}`,
+        `${mm}.${dd}`,
+        `${dd}/${mm}`,
+        `${mm}/${dd}`
+      ]);
+
+      // Also accept unpadded single-digit day/month on manual Enter/Submit
+      const manualSubmitSet = new Set([
+        ...autoTriggerSet,
+        `${d}-${m}`,
+        `${m}-${d}`,
+        `${d}.${m}`,
+        `${m}.${d}`,
+        `${d}/${m}`,
+        `${m}/${d}`
+      ]);
+
+      return { autoTriggerSet, manualSubmitSet };
+    }
+
+    const loginForm = document.getElementById('loginForm');
+    const accessInput = document.getElementById('accessInput');
+    const loginError = document.getElementById('loginError');
+    const authCard = document.getElementById('authCard');
+
+    function completeLogin() {
+      if (isAuthenticated) return;
+      isAuthenticated = true;
+      loginError.classList.add('hidden');
+      accessInput.value = '';
+      accessInput.blur();
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('appWorkspace').classList.remove('hidden');
+      initWorkspaces();
+      showToast('Authenticated. Welcome to the Smart Lecture Lab.', 'success');
+    }
+
+    // Automatically log in as soon as the correct 4-digit PIN or DD-MM / MM-DD is entered
+    accessInput.addEventListener('input', () => {
+      loginError.classList.add('hidden');
+      const entered = accessInput.value.trim();
+      const { autoTriggerSet } = getValidDatePasswords();
+
+      if (autoTriggerSet.has(entered)) {
+        completeLogin();
+      }
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = accessInput.value.trim();
+      const { manualSubmitSet } = getValidDatePasswords();
+
+      if (manualSubmitSet.has(entered)) {
+        completeLogin();
+      } else {
+        loginError.classList.remove('hidden');
+        authCard.classList.remove('animate-shake');
+        void authCard.offsetWidth; // trigger reflow
+        authCard.classList.add('animate-shake');
+        accessInput.value = '';
+        accessInput.focus();
+      }
+    });
+
+    function logoutSession() {
+      isAuthenticated = false;
+      document.getElementById('appWorkspace').classList.add('hidden');
+      document.getElementById('authScreen').classList.remove('hidden');
+      loginError.classList.add('hidden');
+      accessInput.value = '';
+    }
+
+    /* ---------------------------------------------------------------------
+     * 2. 4-APP CAROUSEL NAVIGATION & RESPONSIVE LAYOUT CONTROLLERS
+     * --------------------------------------------------------------------- */
+    const carouselModules = ['cnc', 'sma', 'slot3', 'slot4'];
+    let activeCarouselIdx = 0;
+    let activeModule = 'cnc';
+    let workspacesInitialized = false;
+
+    function selectCarouselIndex(idx) {
+      activeCarouselIdx = (idx + carouselModules.length) % carouselModules.length;
+      const mod = carouselModules[activeCarouselIdx];
+      switchModule(mod);
+
+      // Update header indicator & dots
+      document.getElementById('headerSlideIndicator').textContent = `App ${activeCarouselIdx + 1} / 4`;
+      const activeBorderStyles = [
+        'border-accentblue bg-blue-50/60 shadow-sm',
+        'border-accentteal bg-emerald-50/60 shadow-sm',
+        'border-accentamber bg-amber-50/80 shadow-sm',
+        'border-fhred bg-red-50/80 shadow-sm'
+      ];
+      const inactiveBorderStyles = [
+        'border-gray-200 bg-vlightgray/70 hover:bg-white',
+        'border-gray-200 bg-vlightgray/70 hover:bg-white',
+        'border-dashed border-amber-400/80 bg-amber-50/40 hover:bg-amber-50/80',
+        'border-dashed border-fhred/60 bg-red-50/40 hover:bg-red-50/80'
+      ];
+
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById(`carDot${i}`);
+        const card = document.getElementById(`carCard${i}`);
+        if (i === activeCarouselIdx) {
+          dot.className = 'w-5 h-1.5 rounded-full bg-fhred transition-all';
+          card.className = `snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[24%] text-left p-3 rounded-xl border-2 transition flex flex-col justify-between ${activeBorderStyles[i]}`;
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } else {
+          dot.className = 'w-2 h-1.5 rounded-full bg-gray-300 transition-all';
+          card.className = `snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[24%] text-left p-3 rounded-xl border-2 transition flex flex-col justify-between ${inactiveBorderStyles[i]}`;
+        }
+      }
+    }
+
+    function stepCarousel(delta) {
+      selectCarouselIndex(activeCarouselIdx + delta);
+    }
+
+    function switchModule(mod) {
+      activeModule = mod;
+      const sections = {
+        cnc: document.getElementById('moduleCNC'),
+        sma: document.getElementById('moduleSMA'),
+        slot3: document.getElementById('moduleSlot3'),
+        slot4: document.getElementById('moduleSlot4')
+      };
+
+      Object.keys(sections).forEach(key => {
+        if (key === mod) sections[key].classList.remove('hidden');
+        else sections[key].classList.add('hidden');
+      });
+
+      if (mod === 'cnc') resizeCncCanvases();
+      if (mod === 'sma') resizeSmaCanvas();
+    }
+
+    function setCncMobileView(view) {
+      const pA = document.getElementById('cncPanelA');
+      const pB = document.getElementById('cncPanelB');
+      const bBoth = document.getElementById('subTabBoth');
+      const bA = document.getElementById('subTabA');
+      const bB = document.getElementById('subTabB');
+
+      [bBoth, bA, bB].forEach(b => b.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold text-fhgray');
+      if (view === 'a') {
+        pA.classList.remove('hidden');
+        pB.classList.add('hidden');
+        bA.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold bg-fhdark text-white';
+      } else if (view === 'b') {
+        pA.classList.add('hidden');
+        pB.classList.remove('hidden');
+        bB.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold bg-fhdark text-white';
+      } else {
+        pA.classList.remove('hidden');
+        pB.classList.remove('hidden');
+        bBoth.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold bg-fhdark text-white';
+      }
+      resizeCncCanvases();
+    }
+
+    /* =====================================================================
+     * 3. MODULE 1 ENGINE: CNC WEBTWIN & POKA-YOKE MOBILE HMI
+     *    Implements exact equations from Slide 25:
+     *    Q = a_p * a_e * v_f
+     *    P_c = (Q * k_c) / (60000 * eta) [kW]
+     * ===================================================================== */
+    const gcodeProgram = [
+      { block: 'N0100 G00 X15.0 Y115.0 Z5.0',  type: 'G00', x: 15.0,  y: 115.0, z: 5.0,  F: 3000, S: 8500 },
+      { block: 'N0140 G00 X32.0 Y96.0 Z1.0',   type: 'G00', x: 32.0,  y: 96.0,  z: 1.0,  F: 2500, S: 8500 },
+      { block: 'N0180 G01 X32.0 Y96.0 Z-6.0',  type: 'G01', x: 32.0,  y: 96.0,  z: -6.0, F: 600,  S: 8500 },
+      { block: 'N0220 G01 X148.0 Y96.0 Z-6.0', type: 'G01', x: 148.0, y: 96.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0260 G01 X148.0 Y24.0 Z-6.0', type: 'G01', x: 148.0, y: 24.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0300 G01 X32.0 Y24.0 Z-6.0',  type: 'G01', x: 32.0,  y: 24.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0340 G01 X32.0 Y80.0 Z-6.0',  type: 'G01', x: 32.0,  y: 80.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0380 G01 X130.0 Y80.0 Z-6.0', type: 'G01', x: 130.0, y: 80.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0420 G01 X130.0 Y40.0 Z-6.0', type: 'G01', x: 130.0, y: 40.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0460 G01 X52.0 Y40.0 Z-6.0',  type: 'G01', x: 52.0,  y: 40.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0500 G01 X52.0 Y64.0 Z-6.0',  type: 'G01', x: 52.0,  y: 64.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0540 G01 X108.0 Y64.0 Z-6.0', type: 'G01', x: 108.0, y: 64.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0580 G01 X108.0 Y52.0 Z-6.0', type: 'G01', x: 108.0, y: 52.0,  z: -6.0, F: 850,  S: 8500 },
+      { block: 'N0620 G01 X76.0 Y52.0 Z-6.0',  type: 'G01', x: 76.0,  y: 52.0,  z: -6.0, F: 850,  S: 8500 }
+    ];
+
+    const cncState = {
+      mode: 'RUN',        // 'RUN' | 'HOLD' | 'ABORT'
+      segIndex: 0,
+      segT: 0,
+      pose: { x: 15.0, y: 115.0, z: 5.0 },
+      alphaF: 1.00,
+      alphaS: 1.05,
+      pokaYoke: true,
+      powerKw: 4.8,
+      vibG: 0.18,
+      extraVib: 0,
+      imuActive: false,
+      imuVib: 0,
+      powerHistory: [4.1, 4.4, 4.3, 4.8, 4.6, 5.0, 4.5, 4.9, 4.7, 4.8, 4.75, 4.85, 4.8, 4.9, 4.7, 4.8]
+    };
+
+    function updateOverrides() {
+      const fSlider = document.getElementById('feedSlider');
+      const sSlider = document.getElementById('spindleSlider');
+      cncState.alphaF = Number(fSlider.value) / 100;
+      cncState.alphaS = Number(sSlider.value) / 100;
+      document.getElementById('feedPctVal').textContent = `${fSlider.value}%`;
+      document.getElementById('spindlePctVal').textContent = `${sSlider.value}%`;
+    }
+
+    function togglePokaYoke() {
+      cncState.pokaYoke = !cncState.pokaYoke;
+      const fSlider = document.getElementById('feedSlider');
+      const btn = document.getElementById('pokaToggleBtn');
+      const dot = document.getElementById('pokaDot');
+      const hint = document.getElementById('feedRangeHint');
+
+      if (cncState.pokaYoke) {
+        fSlider.max = 120;
+        if (Number(fSlider.value) > 120) fSlider.value = 120;
+        updateOverrides();
+        btn.textContent = 'LOCKED ON';
+        btn.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-accentteal hover:opacity-80 transition';
+        dot.className = 'inline-block w-2 h-2 rounded-full bg-accentteal';
+        hint.textContent = '[50–120%]';
+        showToast('Poka-Yoke Guard enabled: Feedrate clamped to 120% max.', 'success');
+      } else {
+        fSlider.max = 185;
+        btn.textContent = 'BYPASSED (UNSAFE)';
+        btn.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 text-fhred hover:opacity-80 transition';
+        dot.className = 'inline-block w-2 h-2 rounded-full bg-fhred animate-ping';
+        hint.textContent = '[50–185% UNGUARDED]';
+        showToast('Warning: Poka-Yoke disabled! High feedrates can overload spindle.', 'warn');
+      }
+    }
+
+    function cncCommand(cmd) {
+      const badge = document.getElementById('cncStateBadge');
+      const pill = document.getElementById('droStatusPill');
+
+      if (cmd === 'ESTOP') {
+        cncState.mode = 'ABORT';
+        cncState.pose.z = 25.0; // Immediate safe Z-retraction
+        cncState.powerKw = 0;
+        badge.textContent = 'E-STOP • SAFE Z-RETRACT (+25mm)';
+        badge.className = 'px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-red-100 text-fhred';
+        pill.textContent = 'E-STOP';
+        pill.className = 'px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-fhred tracking-wider';
+        showToast('PRIORITY E-STOP: Spindle halted & Z retracted to +25.0 mm.', 'danger');
+      } else if (cmd === 'HOLD') {
+        if (cncState.mode === 'ABORT') return;
+        cncState.mode = 'HOLD';
+        badge.textContent = 'FEED HOLD • v_f = 0';
+        badge.className = 'px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-amber-100 text-accentamber';
+        pill.textContent = 'HOLD';
+        pill.className = 'px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-accentamber tracking-wider';
+        showToast('Feed Hold active: Axis interpolation paused.', 'warn');
+      } else if (cmd === 'START') {
+        if (cncState.mode === 'ABORT') {
+          cncState.pose.z = -6.0;
+        }
+        cncState.mode = 'RUN';
+        badge.textContent = 'ONLINE • 30 Hz SYNC';
+        badge.className = 'px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-emerald-100 text-accentteal';
+        pill.textContent = 'ONLINE';
+        pill.className = 'px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-accentteal tracking-wider';
+        showToast('Cycle running: Interpolating G-code queue.', 'success');
+      }
+    }
+
+    function resetCncCycle() {
+      cncState.segIndex = 0;
+      cncState.segT = 0;
+      cncState.pose = { x: gcodeProgram[0].x, y: gcodeProgram[0].y, z: gcodeProgram[0].z };
+      if (cncState.pokaYoke === false) togglePokaYoke();
+      document.getElementById('feedSlider').value = 100;
+      document.getElementById('spindleSlider').value = 105;
+      updateOverrides();
+      cncCommand('START');
+    }
+
+    function injectChatterPulse() {
+      cncState.extraVib = 0.42;
+      showToast('Simulated regenerative chatter impulse (+0.42 g).', 'warn');
+    }
+
+    // Optional Smartphone Accelerometer Integration for Live Lecture Demo
+    async function toggleMotionSensor() {
+      const statusEl = document.getElementById('imuStatusText');
+      if (cncState.imuActive) {
+        cncState.imuActive = false;
+        cncState.imuVib = 0;
+        window.removeEventListener('devicemotion', handleDeviceMotion);
+        statusEl.textContent = 'Sim';
+        showToast('Switched to simulated spindle vibration.', 'info');
+        return;
+      }
+
+      if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+        try {
+          const perm = await DeviceMotionEvent.requestPermission();
+          if (perm !== 'granted') {
+            showToast('Motion permission denied by browser.', 'warn');
+            return;
+          }
+        } catch (err) {
+          showToast('Accelerometer requires HTTPS mobile context; using Bump button.', 'info');
+          return;
+        }
+      }
+
+      if ('ondevicemotion' in window) {
+        cncState.imuActive = true;
+        window.addEventListener('devicemotion', handleDeviceMotion);
+        statusEl.textContent = 'LIVE';
+        showToast('Phone IMU active! Gently shake your phone to simulate CNC chatter.', 'success');
+      } else {
+        showToast('No hardware IMU detected on this device; use Bump button.', 'info');
+      }
+    }
+
+    function handleDeviceMotion(event) {
+      if (!cncState.imuActive) return;
+      const acc = event.acceleration || event.accelerationIncludingGravity;
+      if (!acc) return;
+      const mag = Math.sqrt((acc.x || 0) ** 2 + (acc.y || 0) ** 2 + (acc.z || 0) ** 2);
+      // Normalize gravity ~9.81 if accelerationIncludingGravity is used
+      const delta = event.acceleration ? mag : Math.abs(mag - 9.81);
+      cncState.imuVib = Math.min(0.85, delta * 0.08);
+    }
+
+    function resizeCncCanvases() {
+      ['toolpathCanvas', 'sparklineCanvas'].forEach(id => {
+        const c = document.getElementById(id);
+        if (!c || c.clientWidth === 0) return;
+        const dpr = window.devicePixelRatio || 1;
+        c.width = c.clientWidth * dpr;
+        c.height = c.clientHeight * dpr;
+      });
+    }
+
+    let sparkTick = 0;
+    function stepCncSimulation(dt) {
+      const totalSegs = gcodeProgram.length - 1;
+      const currTarget = gcodeProgram[Math.min(cncState.segIndex + 1, totalSegs)];
+      const prevTarget = gcodeProgram[cncState.segIndex];
+
+      const effectiveAlphaF = cncState.pokaYoke ? Math.min(Math.max(cncState.alphaF, 0.5), 1.2) : cncState.alphaF;
+      let vf = 0;
+      let rpm = Math.round(currTarget.S * cncState.alphaS);
+
+      if (cncState.mode === 'RUN') {
+        vf = Math.round(currTarget.F * effectiveAlphaF);
+        const dx = currTarget.x - prevTarget.x;
+        const dy = currTarget.y - prevTarget.y;
+        const dz = currTarget.z - prevTarget.z;
+        const dist = Math.max(0.001, Math.hypot(dx, dy, dz));
+        // Scaled visual speed so pocket completes in ~22 seconds for engaging lecture pacing
+        const visualSpeedMmPerSec = (vf / 60) * 2.4;
+        cncState.segT += (visualSpeedMmPerSec * dt) / dist;
+
+        if (cncState.segT >= 1.0) {
+          cncState.segIndex++;
+          cncState.segT = 0;
+          if (cncState.segIndex >= totalSegs) {
+            cncState.segIndex = 0; // Loop demo seamlessly
+          }
+        }
+
+        const p0 = gcodeProgram[cncState.segIndex];
+        const p1 = gcodeProgram[Math.min(cncState.segIndex + 1, totalSegs)];
+        cncState.pose.x = p0.x + (p1.x - p0.x) * cncState.segT;
+        cncState.pose.y = p0.y + (p1.y - p0.y) * cncState.segT;
+        cncState.pose.z = p0.z + (p1.z - p0.z) * cncState.segT;
+
+        // Cutting Power Model from Slide 25: P_c = (a_p * a_e * v_f * k_c) / (60000 * eta)
+        // Using Aluminum/Light Alloy Milling: a_p=6mm, a_e=5mm, k_c=820 N/mm^2, eta=0.85
+        if (p1.type === 'G01' && cncState.pose.z < 0) {
+          const ap = 6.0;
+          const ae = 5.0;
+          const kc = 780;
+          const eta = 0.85;
+          const Q_mm3 = ap * ae * vf; // mm^3/min
+          const ripple = Math.sin(performance.now() * 0.009) * 0.16;
+          cncState.powerKw = Math.max(0.4, (Q_mm3 * kc) / (60000 * 1000 * eta) * 14.5 + ripple);
+          document.getElementById('mrrReadout').textContent = `MRR: ${(Q_mm3 / 1000).toFixed(1)} cm³/min`;
+        } else {
+          cncState.powerKw = 0.65; // Spindle idle windage
+          document.getElementById('mrrReadout').textContent = `MRR: 0.0 cm³/min (Rapid)`;
+        }
+
+        // Overload Safety Interlock Check (P_max = 6.2 kW)
+        if (cncState.powerKw > 6.25) {
+          cncCommand('ESTOP');
+          showToast('OVERLOAD ALARM (P_c > 6.2 kW)! Auto Safe Z-Retraction triggered!', 'danger');
+        }
+      } else if (cncState.mode === 'HOLD') {
+        vf = 0;
+        cncState.powerKw = 0.55;
+      } else {
+        vf = 0;
+        rpm = 0;
+        cncState.powerKw = 0.0;
+      }
+
+      // Decay simulated vibration bump & combine with IMU
+      cncState.extraVib = Math.max(0, cncState.extraVib - dt * 0.28);
+      const baseVib = cncState.mode === 'RUN' ? (0.14 + (cncState.powerKw / 35)) : 0.02;
+      cncState.vibG = baseVib + cncState.extraVib + cncState.imuVib;
+
+      // Update Sparkline History every ~180ms
+      sparkTick += dt;
+      if (sparkTick >= 0.18) {
+        sparkTick = 0;
+        cncState.powerHistory.push(cncState.powerKw);
+        if (cncState.powerHistory.length > 22) cncState.powerHistory.shift();
+      }
+
+      // Update DRO DOM
+      const activeBlock = gcodeProgram[Math.min(cncState.segIndex + 1, totalSegs)];
+      document.getElementById('droX').textContent = (cncState.pose.x >= 0 ? '+' : '') + cncState.pose.x.toFixed(2);
+      document.getElementById('droY').textContent = (cncState.pose.y >= 0 ? '+' : '') + cncState.pose.y.toFixed(2);
+      document.getElementById('droZ').textContent = (cncState.pose.z >= 0 ? '+' : '') + cncState.pose.z.toFixed(1);
+      document.getElementById('droS').textContent = rpm;
+      document.getElementById('droF').textContent = vf;
+
+      const progressPct = Math.min(100, Math.round(((cncState.segIndex + cncState.segT) / totalSegs) * 100));
+      document.getElementById('gcodeLineText').textContent = activeBlock.block;
+      document.getElementById('gcodePctText').textContent = `${progressPct}%`;
+      document.getElementById('gcodeProgressBar').style.width = `${progressPct}%`;
+
+      // Update Semi-Circular Gauges (arc length = 141.37)
+      const loadPct = Math.min(100, Math.round((cncState.powerKw / 7.5) * 100));
+      const pOffset = 141.37 * (1 - Math.min(1, cncState.powerKw / 7.5));
+      const pArc = document.getElementById('gaugePowerArc');
+      pArc.setAttribute('stroke-dashoffset', pOffset.toFixed(1));
+      pArc.setAttribute('stroke', cncState.powerKw > 5.6 ? '#C8102E' : '#00877D');
+      document.getElementById('gaugeKwText').textContent = `${cncState.powerKw.toFixed(1)} kW`;
+      document.getElementById('gaugeLoadSub').textContent = `Load ${loadPct}%`;
+
+      const vOffset = 141.37 * (1 - Math.min(1, cncState.vibG / 0.75));
+      const vArc = document.getElementById('gaugeVibArc');
+      vArc.setAttribute('stroke-dashoffset', vOffset.toFixed(1));
+      vArc.setAttribute('stroke', cncState.vibG > 0.40 ? '#C8102E' : '#D27D0A');
+      document.getElementById('gaugeVibText').textContent = `${cncState.vibG.toFixed(2)} g`;
+      document.getElementById('gaugeVibSub').textContent = cncState.vibG > 0.40 ? 'CHATTER!' : 'Vib. OK';
+
+      // Update Priority WebSocket JSON Stream
+      document.getElementById('wsFrameLog').textContent = JSON.stringify({
+        cmd: cncState.mode === 'ABORT' ? 'PRIORITY_ESTOP' : 'TELEMETRY_30HZ',
+        pose: {
+          x: Number(cncState.pose.x.toFixed(2)),
+          y: Number(cncState.pose.y.toFixed(2)),
+          z: Number(cncState.pose.z.toFixed(1))
+        },
+        S: rpm,
+        F: vf,
+        Pc_kW: Number(cncState.powerKw.toFixed(2)),
+        vib_g: Number(cncState.vibG.toFixed(2)),
+        pokaYoke: cncState.pokaYoke
+      });
+
+      drawToolpathCanvas();
+      drawSparklineCanvas();
+    }
+
+    function drawToolpathCanvas() {
+      const canvas = document.getElementById('toolpathCanvas');
+      if (!canvas || canvas.width === 0) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Coordinate mapping: Workpiece X in [0..180], Y in [0..130]
+      const mapX = (x) => (x / 180) * w;
+      const mapY = (y) => h - (y / 130) * h;
+
+      // 1. Background Grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = Math.max(1, w / 350);
+      const step = w / 10;
+      for (let gx = step; gx < w; gx += step) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+      }
+      for (let gy = step; gy < h; gy += step) {
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
+      }
+
+      // 2. Workpiece Stock Pocket Boundary
+      ctx.strokeStyle = '#4B8BF4';
+      ctx.lineWidth = Math.max(2, w / 170);
+      const rx = mapX(20), ry = mapY(108), rw = mapX(160) - mapX(20), rh = mapY(14) - mapY(108);
+      ctx.strokeRect(rx, ry, rw, rh);
+
+      // 3. Faint Planned Full Spiral Path
+      ctx.strokeStyle = 'rgba(0, 185, 170, 0.24)';
+      ctx.lineWidth = Math.max(2, w / 150);
+      ctx.beginPath();
+      for (let i = 2; i < gcodeProgram.length; i++) {
+        const pt = gcodeProgram[i];
+        if (i === 2) ctx.moveTo(mapX(pt.x), mapY(pt.y));
+        else ctx.lineTo(mapX(pt.x), mapY(pt.y));
+      }
+      ctx.stroke();
+
+      // 4. Rapid Approach G00 (Dashed Amber Line)
+      ctx.save();
+      ctx.setLineDash([6, 5]);
+      ctx.strokeStyle = '#D27D0A';
+      ctx.lineWidth = Math.max(2, w / 160);
+      ctx.beginPath();
+      ctx.moveTo(mapX(gcodeProgram[0].x), mapY(gcodeProgram[0].y));
+      ctx.lineTo(mapX(gcodeProgram[1].x), mapY(gcodeProgram[1].y));
+      ctx.stroke();
+      ctx.restore();
+
+      // 5. Executed Active Climb-Milling Path (Bright Teal)
+      if (cncState.segIndex >= 2) {
+        ctx.strokeStyle = '#14B8A6';
+        ctx.lineWidth = Math.max(3, w / 115);
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(mapX(gcodeProgram[2].x), mapY(gcodeProgram[2].y));
+        for (let i = 3; i <= cncState.segIndex; i++) {
+          ctx.lineTo(mapX(gcodeProgram[i].x), mapY(gcodeProgram[i].y));
+        }
+        ctx.lineTo(mapX(cncState.pose.x), mapY(cncState.pose.y));
+        ctx.stroke();
+      }
+
+      // 6. Active Cutter Position (FH Red Circle with White Ring)
+      const cx = mapX(cncState.pose.x);
+      const cy = mapY(cncState.pose.y);
+      const radius = Math.max(7, w / 36);
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius * 1.45, 0, Math.PI * 2);
+      ctx.fillStyle = cncState.mode === 'ABORT' ? 'rgba(200,16,46,0.38)' : 'rgba(20,184,166,0.28)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#C8102E';
+      ctx.fill();
+      ctx.lineWidth = Math.max(2.5, w / 150);
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.stroke();
+    }
+
+    function drawSparklineCanvas() {
+      const canvas = document.getElementById('sparklineCanvas');
+      if (!canvas || canvas.width === 0) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const maxScaleKw = 7.5;
+      const mapY = (kw) => h - 6 - (Math.min(maxScaleKw, Math.max(0, kw)) / maxScaleKw) * (h - 12);
+
+      // Overload Threshold Line (P_max = 6.2 kW)
+      const limitY = mapY(6.2);
+      ctx.save();
+      ctx.setLineDash([6, 5]);
+      ctx.strokeStyle = 'rgba(200, 16, 46, 0.7)';
+      ctx.lineWidth = Math.max(1.5, w / 220);
+      ctx.beginPath();
+      ctx.moveTo(0, limitY);
+      ctx.lineTo(w, limitY);
+      ctx.stroke();
+      ctx.restore();
+
+      // P_c(t) Curve
+      const hist = cncState.powerHistory;
+      if (hist.length < 2) return;
+
+      ctx.beginPath();
+      hist.forEach((val, idx) => {
+        const px = (idx / (hist.length - 1)) * w;
+        const py = mapY(val);
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.strokeStyle = '#195FA5';
+      ctx.lineWidth = Math.max(2.5, w / 130);
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+    }
+
+    /* =====================================================================
+     * 4. MODULE 2 ENGINE: SLIME MOULD (SMA) TOPOLOGY & BLOCKTRUST LEDGER
+     *    Bio-oscillator venous thickness conductance update + SHA-256 DLT
+     * ===================================================================== */
+    let currentNodeTool = 'load';
+    const smaState = {
+      presetName: 'PIX Moving WAAM Chassis',
+      nodes: [],
+      edges: [],
+      iter: 0,
+      pruneThreshold: 0.35
+    };
+
+    function setNodeTool(tool) {
+      currentNodeTool = tool;
+      const bLoad = document.getElementById('nodeToolLoad');
+      const bSup = document.getElementById('nodeToolSupport');
+      if (tool === 'load') {
+        bLoad.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-fhred text-white transition';
+        bSup.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-fhdark hover:bg-white transition';
+      } else {
+        bSup.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-accentblue text-white transition';
+        bLoad.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-fhdark hover:bg-white transition';
+      }
+    }
+
+    function loadSmaPreset(key) {
+      smaState.iter = 0;
+      if (key === 'pix') {
+        smaState.presetName = 'PIX Moving WAAM Chassis';
+        smaState.nodes = [
+          { x: 0.14, y: 0.78, type: 'support' },
+          { x: 0.86, y: 0.78, type: 'support' },
+          { x: 0.32, y: 0.24, type: 'load' },
+          { x: 0.68, y: 0.24, type: 'load' },
+          { x: 0.50, y: 0.60, type: 'load' },
+          { x: 0.24, y: 0.52, type: 'relay' },
+          { x: 0.76, y: 0.52, type: 'relay' },
+          { x: 0.50, y: 0.36, type: 'relay' },
+          { x: 0.38, y: 0.74, type: 'relay' },
+          { x: 0.62, y: 0.74, type: 'relay' }
+        ];
+      } else if (key === 'uav') {
+        smaState.presetName = 'UAV Quad Frame (586g)';
+        smaState.nodes = [
+          { x: 0.50, y: 0.50, type: 'support' },
+          { x: 0.18, y: 0.20, type: 'load' },
+          { x: 0.82, y: 0.20, type: 'load' },
+          { x: 0.18, y: 0.80, type: 'load' },
+          { x: 0.82, y: 0.80, type: 'load' },
+          { x: 0.34, y: 0.36, type: 'relay' },
+          { x: 0.66, y: 0.36, type: 'relay' },
+          { x: 0.34, y: 0.64, type: 'relay' },
+          { x: 0.66, y: 0.64, type: 'relay' },
+          { x: 0.50, y: 0.26, type: 'relay' },
+          { x: 0.50, y: 0.74, type: 'relay' }
+        ];
+      } else {
+        smaState.presetName = 'Aerospace Bionic Bracket';
+        smaState.nodes = [
+          { x: 0.14, y: 0.24, type: 'support' },
+          { x: 0.14, y: 0.76, type: 'support' },
+          { x: 0.86, y: 0.50, type: 'load' },
+          { x: 0.35, y: 0.34, type: 'relay' },
+          { x: 0.35, y: 0.66, type: 'relay' },
+          { x: 0.56, y: 0.42, type: 'relay' },
+          { x: 0.56, y: 0.58, type: 'relay' },
+          { x: 0.26, y: 0.50, type: 'relay' }
+        ];
+      }
+      rebuildSmaMesh();
+    }
+
+    function rebuildSmaMesh() {
+      smaState.edges = [];
+      const n = smaState.nodes.length;
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          const dx = smaState.nodes[i].x - smaState.nodes[j].x;
+          const dy = smaState.nodes[i].y - smaState.nodes[j].y;
+          const dist = Math.hypot(dx, dy);
+          // Connect nearby neighbors to form foraging vascular substrate
+          if (dist < 0.56) {
+            smaState.edges.push({
+              u: i,
+              v: j,
+              dist,
+              weight: 0.65 + Math.random() * 0.35
+            });
+          }
+        }
+      }
+      smaState.iter = 1;
+    }
+
+    function updateSmaPruning() {
+      const val = Number(document.getElementById('smaPruneSlider').value) / 100;
+      smaState.pruneThreshold = val;
+      document.getElementById('smaPruneVal').textContent = val.toFixed(2);
+    }
+
+    function stepSmaOptimization() {
+      if (activeModule !== 'sma' || smaState.edges.length === 0) return;
+      smaState.iter++;
+
+      // Bio-oscillator conductance reinforcement between Supports & Loads
+      const supports = smaState.nodes.map((nd, idx) => nd.type === 'support' ? idx : -1).filter(i => i >= 0);
+      const loads = smaState.nodes.map((nd, idx) => nd.type === 'load' ? idx : -1).filter(i => i >= 0);
+
+      if (supports.length > 0 && loads.length > 0) {
+        // Compute node potentials to guide flux along shortest high-stiffness load paths
+        smaState.edges.forEach((e, idx) => {
+          const nU = smaState.nodes[e.u];
+          const nV = smaState.nodes[e.v];
+
+          // Measure alignment with nearest load-to-support stress trajectory
+          let bestAffinity = 0;
+          loads.forEach(lIdx => {
+            supports.forEach(sIdx => {
+              const L = smaState.nodes[lIdx];
+              const S = smaState.nodes[sIdx];
+              const direct = Math.hypot(L.x - S.x, L.y - S.y);
+              const viaEdge = Math.hypot(L.x - nU.x, L.y - nU.y) + e.dist + Math.hypot(nV.x - S.x, nV.y - S.y);
+              const viaEdgeRev = Math.hypot(L.x - nV.x, L.y - nV.y) + e.dist + Math.hypot(nU.x - S.x, nU.y - S.y);
+              const detour = Math.min(viaEdge, viaEdgeRev) / Math.max(0.05, direct);
+              const score = Math.exp(-(detour - 1.0) * 4.2);
+              if (score > bestAffinity) bestAffinity = score;
+            });
+          });
+
+          // Venous oscillation W(t) from Li et al. (2020)
+          const bioWave = 1 + 0.06 * Math.sin(smaState.iter * 0.08 + idx);
+          const targetW = Math.min(1.45, bestAffinity * 1.35 * bioWave);
+          e.weight = e.weight * 0.92 + targetW * 0.08;
+        });
+      }
+
+      // Compute KPIs
+      const activeEdges = smaState.edges.filter(e => e.weight >= smaState.pruneThreshold);
+      const totalPossibleLen = smaState.edges.reduce((acc, e) => acc + e.dist, 0) || 1;
+      const activeLen = activeEdges.reduce((acc, e) => acc + e.dist * e.weight, 0);
+      const savedPct = Math.min(74, Math.max(18, (1 - (activeLen / totalPossibleLen)) * 100));
+      const safety = Math.max(1.45, (3.65 - savedPct * 0.012)).toFixed(2);
+
+      document.getElementById('smaIterText').textContent = smaState.iter;
+      document.getElementById('smaMassSaved').textContent = `-${savedPct.toFixed(1)}%`;
+      document.getElementById('smaSafetyFactor').textContent = safety;
+      document.getElementById('smaVeinCount').textContent = activeEdges.length;
+
+      drawSmaCanvas();
+    }
+
+    function resizeSmaCanvas() {
+      const c = document.getElementById('smaCanvas');
+      if (!c || c.clientWidth === 0) return;
+      const dpr = window.devicePixelRatio || 1;
+      c.width = c.clientWidth * dpr;
+      c.height = c.clientHeight * dpr;
+      drawSmaCanvas();
+    }
+
+    function drawSmaCanvas() {
+      const canvas = document.getElementById('smaCanvas');
+      if (!canvas || canvas.width === 0) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Subtle CAD Grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      const step = w / 12;
+      for (let x = step; x < w; x += step) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = step; y < h; y += step) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // Draw Slime Mould Veins
+      smaState.edges.forEach(e => {
+        const n1 = smaState.nodes[e.u];
+        const n2 = smaState.nodes[e.v];
+        const x1 = n1.x * w, y1 = n1.y * h;
+        const x2 = n2.x * w, y2 = n2.y * h;
+
+        if (e.weight < smaState.pruneThreshold) {
+          // Pruned weak capillary
+          ctx.strokeStyle = 'rgba(210, 125, 10, 0.12)';
+          ctx.lineWidth = Math.max(1, w / 450);
+        } else {
+          // Reinforced Bionic Structural Member
+          const norm = Math.min(1, (e.weight - smaState.pruneThreshold) / 0.9);
+          ctx.strokeStyle = norm > 0.55 ? '#14B8A6' : '#F59E0B';
+          ctx.lineWidth = Math.max(2.5, (2 + norm * 8) * (w / 520));
+        }
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      });
+
+      // Draw Nodes
+      smaState.nodes.forEach(nd => {
+        const cx = nd.x * w;
+        const cy = nd.y * h;
+        const r = nd.type === 'relay' ? Math.max(4, w / 115) : Math.max(8, w / 55);
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        if (nd.type === 'load') {
+          ctx.fillStyle = '#C8102E';
+        } else if (nd.type === 'support') {
+          ctx.fillStyle = '#195FA5';
+        } else {
+          ctx.fillStyle = '#F59E0B';
+        }
+        ctx.fill();
+
+        if (nd.type !== 'relay') {
+          ctx.lineWidth = Math.max(2, w / 220);
+          ctx.strokeStyle = '#FFFFFF';
+          ctx.stroke();
+        }
+      });
+    }
+
+    // Touch / Click to Add Custom Nodes on SMA Canvas
+    document.getElementById('smaCanvas').addEventListener('pointerdown', (e) => {
+      const rect = e.target.getBoundingClientRect();
+      const nx = Math.min(0.94, Math.max(0.06, (e.clientX - rect.left) / rect.width));
+      const ny = Math.min(0.92, Math.max(0.08, (e.clientY - rect.top) / rect.height));
+
+      // Add primary node + a subtle nearby relay node for organic branching
+      smaState.nodes.push({ x: nx, y: ny, type: currentNodeTool });
+      smaState.nodes.push({
+        x: Math.min(0.92, Math.max(0.08, nx + (Math.random() - 0.5) * 0.14)),
+        y: Math.min(0.90, Math.max(0.10, ny + (Math.random() - 0.5) * 0.14)),
+        type: 'relay'
+      });
+      if (smaState.nodes.length > 22) {
+        // Keep fast real-time mobile performance
+        const relayIdx = smaState.nodes.findIndex(n => n.type === 'relay');
+        if (relayIdx >= 0) smaState.nodes.splice(relayIdx, 1);
+      }
+      rebuildSmaMesh();
+    });
+
+    /* ---------------------------------------------------------------------
+     * 5. DETERMINISTIC PURE-JS SHA-256 & BLOCKTRUST LEDGER
+     *    Works in all mobile/iframe contexts without secure-origin errors.
+     * --------------------------------------------------------------------- */
+    function sha256Hex(ascii) {
+      const rightRotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
+      const mathPow = Math.pow;
+      const maxWord = mathPow(2, 32);
+      let result = '';
+      const words = [];
+      const asciiBitLength = ascii.length * 8;
+
+      let hash = [];
+      const k = [];
+      let primeCounter = 0;
+      const isComposite = {};
+      for (let candidate = 2; primeCounter < 64; candidate++) {
+        if (!isComposite[candidate]) {
+          for (let i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+          hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+          k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+        }
+      }
+
+      ascii += '\x80';
+      while ((ascii.length % 64) - 56) ascii += '\x00';
+      for (let i = 0; i < ascii.length; i++) {
+        const j = ascii.charCodeAt(i);
+        words[i >> 2] |= j << (((3 - i) % 4) * 8);
+      }
+      words[words.length] = (asciiBitLength / maxWord) | 0;
+      words[words.length] = asciiBitLength;
+
+      for (let j = 0; j < words.length;) {
+        const w = words.slice(j, (j += 16));
+        const oldHash = hash.slice(0);
+        for (let i = 0; i < 64; i++) {
+          const w15 = w[i - 15], w2 = w[i - 2];
+          const a = hash[0], e = hash[4];
+          const temp1 =
+            hash[7] +
+            (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) +
+            ((e & hash[5]) ^ (~e & hash[6])) +
+            k[i] +
+            (w[i] =
+              i < 16
+                ? w[i]
+                : (w[i - 16] +
+                    (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) +
+                    w[i - 7] +
+                    (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) |
+                  0);
+          const temp2 =
+            (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) +
+            ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+          hash = [(temp1 + temp2) | 0].concat(hash);
+          hash[4] = (hash[4] + temp1) | 0;
+          hash.pop();
+        }
+        for (let i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
+      }
+
+      for (let i = 0; i < 8; i++) {
+        for (let j = 3; j + 1; j--) {
+          const b = (hash[i] >> (j * 8)) & 255;
+          result += (b < 16 ? '0' : '') + b.toString(16);
+        }
+      }
+      return result;
+    }
+
+    const blockchain = [];
+
+    function computeBlockHash(b) {
+      const payload = `${b.prevHash}|${b.part}|${b.mat}|${b.massSaved}|${b.safety}|${b.timestamp}`;
+      return sha256Hex(payload);
+    }
+
+    function createBlock(part, mat, massSaved, safety) {
+      const prevHash = blockchain.length === 0
+        ? '0000000000000000000000000000000000000000000000000000000000000000'
+        : blockchain[blockchain.length - 1].storedHash;
+      const block = {
+        index: blockchain.length,
+        part,
+        mat,
+        massSaved,
+        origMassSaved: massSaved,
+        safety,
+        origSafety: safety,
+        timestamp: new Date().toISOString().slice(11, 19) + ' UTC',
+        prevHash,
+        storedHash: ''
+      };
+      block.storedHash = computeBlockHash(block);
+      blockchain.push(block);
+      renderLedger();
+    }
+
+    function mintBionicPassport() {
+      const massSaved = document.getElementById('smaMassSaved').textContent;
+      const safety = `SF=${document.getElementById('smaSafetyFactor').textContent}`;
+      createBlock(smaState.presetName, 'AlSi10Mg / WAAM Cert', massSaved, safety);
+      showToast('Minted Bionic Digital Product Passport onto Blocktrust!', 'success');
+    }
+
+    function tamperBlock(idx) {
+      const b = blockchain[idx];
+      if (!b) return;
+      b.safety = 'SF=0.82 (FAKE QA)';
+      b.massSaved = '-89.9% (UNVERIFIED)';
+      renderLedger();
+      showToast(`Block #${idx} altered! Cryptographic hash mismatch detected downstream.`, 'danger');
+    }
+
+    function restoreLedgerConsensus() {
+      for (let i = 0; i < blockchain.length; i++) {
+        const b = blockchain[i];
+        b.massSaved = b.origMassSaved;
+        b.safety = b.origSafety;
+        b.prevHash = i === 0
+          ? '0000000000000000000000000000000000000000000000000000000000000000'
+          : blockchain[i - 1].storedHash;
+        b.storedHash = computeBlockHash(b);
+      }
+      renderLedger();
+      showToast('Round-Robin node consensus restored all verified QA records.', 'success');
+    }
+
+    function renderLedger() {
+      const container = document.getElementById('ledgerContainer');
+      const badge = document.getElementById('chainIntegrityBadge');
+      container.innerHTML = '';
+
+      let chainValid = true;
+      let runningPrevHash = '0000000000000000000000000000000000000000000000000000000000000000';
+
+      blockchain.forEach((b, idx) => {
+        const livePrevMatch = b.prevHash === runningPrevHash;
+        const recalculated = computeBlockHash({ ...b, prevHash: runningPrevHash });
+        const selfValid = recalculated === b.storedHash && livePrevMatch;
+        if (!selfValid) chainValid = false;
+        runningPrevHash = recalculated;
+
+        const card = document.createElement('div');
+        card.className = `rounded-xl p-3 border text-xs transition ${
+          selfValid
+            ? 'bg-vlightgray border-gray-200'
+            : 'bg-red-50 border-fhred ring-1 ring-fhred/30'
+        }`;
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-mono font-extrabold ${selfValid ? 'text-fhdark' : 'text-fhred'}">
+              Block #${b.index} &bull; ${b.timestamp}
+            </span>
+            <button
+              onclick="tamperBlock(${idx})"
+              class="text-[10px] font-bold px-2 py-0.5 rounded ${
+                selfValid ? 'bg-white border border-gray-300 text-fhdark hover:border-fhred hover:text-fhred' : 'bg-fhred text-white'
+              } transition"
+            >
+              ${selfValid ? 'Tamper QA' : 'TAMPERED'}
+            </button>
+          </div>
+          <p class="font-bold text-fhdark">${b.part}</p>
+          <p class="text-[11px] text-fhgray mb-1.5">${b.mat} &bull; Mass: <span class="font-mono font-semibold">${b.massSaved}</span> &bull; <span class="font-mono font-semibold">${b.safety}</span></p>
+          <div class="font-mono text-[10px] bg-white/80 rounded px-2 py-1 border border-gray-200 space-y-0.5">
+            <div class="truncate text-fhgray">Prev: ${b.prevHash.slice(0, 24)}...</div>
+            <div class="truncate font-bold ${selfValid ? 'text-accentteal' : 'text-fhred'}">
+              Hash: ${recalculated.slice(0, 24)}...
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      if (chainValid) {
+        badge.textContent = '✓ CHAIN VALID';
+        badge.className = 'px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-emerald-100 text-accentteal';
+      } else {
+        badge.textContent = '✕ COUNTERFEIT ALERT';
+        badge.className = 'px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-red-100 text-fhred animate-pulse';
+      }
+    }
+
+    /* ---------------------------------------------------------------------
+     * 6. INITIALIZATION & MAIN ANIMATION LOOP
+     * --------------------------------------------------------------------- */
+    let lastFrameTime = performance.now();
+
+    function initWorkspaces() {
+      if (!workspacesInitialized) {
+        workspacesInitialized = true;
+        loadSmaPreset('pix');
+        // Genesis + initial certified aerospace block
+        createBlock('Genesis: FH Joanneum Factory Cell', 'ISO-23247 Twin Anchor', '0.0%', 'SF=4.00');
+        createBlock('UAV Quad Frame Housing', 'PA12 Carbon SLS', '-22.0%', 'SF=3.03');
+
+        window.addEventListener('resize', () => {
+          resizeCncCanvases();
+          resizeSmaCanvas();
+        });
+
+        requestAnimationFrame(masterLoop);
+      }
+      resizeCncCanvases();
+      resizeSmaCanvas();
+    }
+
+    function masterLoop(now) {
+      const dt = Math.min(0.1, (now - lastFrameTime) / 1000);
+      lastFrameTime = now;
+
+      if (activeModule === 'cnc') {
+        stepCncSimulation(dt);
+      } else {
+        stepSmaOptimization();
+      }
+      requestAnimationFrame(masterLoop);
+    }
+  </script>
+</body>
+</html>
