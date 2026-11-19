@@ -1,940 +1,2081 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>FH JOANNEUM | New Trends in Advanced Digital & Bio-Intelligent Manufacturing (2026)</title>
-
-  <!-- Markmap Toolbar CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.17.2/dist/style.css" />
-
-  <style>
-    /* ==========================================================================
-       FH JOANNEUM Corporate Identity Tokens & Modern Glassmorphic UI
-       ========================================================================== */
-    :root {
-      --fh-red: #C8102E;         /* RGB(200, 16, 46) */
-      --fh-red-soft: #FCE6EA;    /* softred */
-      --fh-dark: #262A2E;        /* RGB(38, 42, 46) */
-      --fh-gray: #696E73;        /* RGB(105, 110, 115) */
-      --fh-vlight: #F2F3F5;      /* vlightgray */
-      --accent-blue: #195FA5;    /* RGB(25, 95, 165) */
-      --accent-teal: #00877D;    /* RGB(0, 135, 125) */
-      --accent-amber: #D27D0A;   /* RGB(210, 125, 10) */
-      --surface-bg: #F8F9FA;
-      --card-bg: rgba(255, 255, 255, 0.94);
-      --border-subtle: rgba(38, 42, 46, 0.12);
-      --shadow-elevated: 0 10px 30px rgba(38, 42, 46, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--surface-bg);
-      background-image:
-        radial-gradient(rgba(38, 42, 46, 0.08) 1px, transparent 1px),
-        radial-gradient(circle at 12% 15%, rgba(200, 16, 46, 0.04), transparent 35%),
-        radial-gradient(circle at 88% 85%, rgba(25, 95, 165, 0.05), transparent 40%);
-      background-size: 24px 24px, 100% 100%, 100% 100%;
-      color: var(--fh-dark);
-      overflow: hidden;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    /* ==========================================================================
-       Top FH JOANNEUM Corporate Header Bar
-       ========================================================================== */
-    .fh-header {
-      position: fixed;
-      top: 16px;
-      left: 20px;
-      right: 20px;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 12px 20px;
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--border-subtle);
-      border-left: 5px solid var(--fh-red);
-      border-radius: 10px;
-      box-shadow: var(--shadow-elevated);
-    }
-
-    .fh-brand-group {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      min-width: 0;
-    }
-
-    /* Vector FH | JOANNEUM Brand Mark */
-    .fh-logo {
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      padding-right: 16px;
-      border-right: 1px solid var(--border-subtle);
-    }
-
-    .fh-logo-top {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 800;
-      font-size: 19px;
-      letter-spacing: 0.02em;
-      color: var(--fh-dark);
-      line-height: 1;
-    }
-
-    .fh-logo-bar {
-      display: inline-block;
-      width: 5px;
-      height: 18px;
-      background-color: var(--fh-red);
-      border-radius: 1px;
-    }
-
-    .fh-logo-divider {
-      display: inline-block;
-      width: 2px;
-      height: 18px;
-      background-color: var(--fh-red);
-      margin: 0 2px;
-    }
-
-    .fh-logo-sub {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--fh-gray);
-      margin-top: 3px;
-      letter-spacing: 0.01em;
-    }
-
-    .fh-course-meta {
-      min-width: 0;
-    }
-
-    .fh-course-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--fh-dark);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .fh-course-subtitle {
-      font-size: 12px;
-      color: var(--fh-gray);
-      margin-top: 2px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .fh-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 10.5px;
-      font-weight: 600;
-      background: var(--fh-red-soft);
-      color: var(--fh-red);
-    }
-
-    /* ==========================================================================
-       Interactive Controls (Search, Expand/Collapse, Fit)
-       ========================================================================== */
-    .fh-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .search-box {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .search-input {
-      width: 210px;
-      padding: 7px 12px 7px 30px;
-      font-size: 12.5px;
-      color: var(--fh-dark);
-      background: var(--fh-vlight);
-      border: 1px solid transparent;
-      border-radius: 7px;
-      outline: none;
-      transition: all 0.2s ease;
-    }
-
-    .search-input:focus {
-      background: #ffffff;
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 0 3px rgba(25, 95, 165, 0.14);
-      width: 245px;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 9px;
-      width: 14px;
-      height: 14px;
-      color: var(--fh-gray);
-      pointer-events: none;
-    }
-
-    .fh-btn {
-      padding: 7px 11px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--fh-dark);
-      background: #ffffff;
-      border: 1px solid var(--border-subtle);
-      border-radius: 7px;
-      cursor: pointer;
-      transition: all 0.16s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .fh-btn:hover {
-      background: var(--fh-vlight);
-      border-color: rgba(38, 42, 46, 0.25);
-    }
-
-    .fh-btn-primary {
-      background: var(--fh-red);
-      color: #ffffff;
-      border-color: var(--fh-red);
-    }
-
-    .fh-btn-primary:hover {
-      background: #a90d26;
-      border-color: #a90d26;
-    }
-
-    /* ==========================================================================
-       Section Legend Pill Bar (Bottom Left)
-       ========================================================================== */
-    .fh-legend {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 90;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 8px 14px;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(38, 42, 46, 0.06);
-      font-size: 11px;
-      color: var(--fh-gray);
-    }
-
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-weight: 500;
-    }
-
-    .legend-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-    }
-
-    /* ==========================================================================
-       Markmap Canvas & Node Styling Overrides
-       ========================================================================== */
-    #mindmap {
-      display: block;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    /* Ensure branch connector paths are always crisp and visible */
-    .markmap-link {
-      fill: none !important;
-      stroke-width: 2px;
-      stroke-opacity: 0.85 !important;
-      stroke-linecap: round;
-    }
-
-    .markmap-node circle {
-      cursor: pointer;
-      stroke-width: 2px;
-      transition: r 0.15s ease;
-    }
-
-    .markmap-node {
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .markmap-node text,
-    .markmap-foreign {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-      color: var(--fh-dark);
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .markmap-foreign strong {
-      font-weight: 700;
-    }
-
-    .node-tag {
-      display: inline-block;
-      padding: 1px 6px;
-      margin-left: 5px;
-      font-size: 10.5px;
-      font-weight: 600;
-      border-radius: 4px;
-      background: #EEF2F6;
-      color: #195FA5;
-      vertical-align: middle;
-    }
-
-    .node-tag-red {
-      background: #FCE6EA;
-      color: #C8102E;
-    }
-
-    .node-tag-teal {
-      background: #E1F5EB;
-      color: #00877D;
-    }
-
-    .node-tag-amber {
-      background: #FEF2DE;
-      color: #B46506;
-    }
-
-    .search-match {
-      background-color: #FEF08A;
-      color: #1E293B;
-      padding: 1px 4px;
-      border-radius: 3px;
-      font-weight: 700;
-    }
-
-    /* Markmap Toolbar Styling */
-    .mm-toolbar {
-      background: var(--card-bg) !important;
-      border: 1px solid var(--border-subtle) !important;
-      border-radius: 8px !important;
-      box-shadow: var(--shadow-elevated) !important;
-      padding: 4px !important;
-    }
-
-    @media (max-width: 960px) {
-      .fh-header {
-        top: 10px;
-        left: 10px;
-        right: 10px;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-        padding: 10px 12px;
-      }
-      .fh-course-title {
-        font-size: 13.5px;
-        white-space: normal;
-        line-height: 1.25;
-      }
-      .fh-course-subtitle {
-        font-size: 11px;
-      }
-      .fh-controls {
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 6px;
-      }
-      .search-box {
-        width: 100%;
-      }
-      .search-input,
-      .search-input:focus {
-        width: 100%;
-        font-size: 14px; /* Prevents iOS auto-zoom on input focus */
-      }
-      .fh-btn {
-        flex: 1 1 auto;
-        justify-content: center;
-        padding: 8px 10px;
-        font-size: 12px;
-      }
-      .fh-legend {
-        display: none;
-      }
-      /* Larger touch targets for circles on mobile */
-      .markmap-node circle {
-        r: 6px;
-        stroke-width: 3px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FH JOANNEUM | 3D CNC Milling Operator Quest</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js r128 UMD + OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #eaedf2;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .font-mono-tech {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        #canvas-container {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            z-index: 0;
+            cursor: grab;
+            touch-action: none;
+        }
+        #canvas-container:active {
+            cursor: grabbing;
+        }
+        #canvas-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            touch-action: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+            border: 1px solid rgba(226, 232, 240, 0.85);
+        }
+        .step-btn {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .step-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
+        .step-btn:active:not(:disabled) {
+            transform: translateY(0px);
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(190, 18, 60, 0.25); }
+            50% { box-shadow: 0 0 0 4px rgba(190, 18, 60, 0.12); }
+        }
+        .step-active {
+            border: 1.5px solid #be123c !important;
+            background-color: #fff1f2 !important;
+            animation: pulseGlow 2.4s infinite;
+        }
+        .step-completed {
+            border: 1px solid #10b981 !important;
+            background-color: #ecfdf5 !important;
+        }
+    </style>
 </head>
-<body>
+<body class="text-slate-800 antialiased">
 
-  <!-- Corporate FH JOANNEUM Header -->
-  <header class="fh-header">
-    <div class="fh-brand-group">
-      <div class="fh-logo" aria-label="FH JOANNEUM University of Applied Sciences">
-        <div class="fh-logo-top">
-          <span class="fh-logo-bar"></span>
-          <span>FH</span>
-          <span class="fh-logo-divider"></span>
-          <span>JOANNEUM</span>
-        </div>
-        <div class="fh-logo-sub">University of Applied Sciences</div>
-      </div>
+    <!-- Login Gate Overlay -->
+    <div id="login-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/55 backdrop-blur-md transition-opacity duration-500">
+        <div class="glass-panel rounded-3xl p-8 w-full max-w-sm text-center shadow-2xl border border-slate-200/90">
+            <div class="inline-flex items-center justify-center gap-2 mb-4 px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200/80">
+                <span class="w-1.5 h-4 bg-rose-700 rounded-full inline-block"></span>
+                <span class="font-extrabold text-sm tracking-tight text-slate-900">FH<span class="text-slate-400 font-normal mx-1">|</span>JOANNEUM</span>
+            </div>
+            <h1 class="text-lg font-extrabold text-slate-900 tracking-tight mb-1">3D CNC Milling Simulation</h1>
+            <p class="text-xs text-slate-500 mb-6">Operator Access Verification</p>
 
-      <div class="fh-course-meta">
-        <div class="fh-course-title">
-          New Trends in the Era of Advanced Digital and Bio-Intelligent Manufacturing
+            <div class="space-y-3">
+                <input
+                    id="login-password-input"
+                    type="password"
+                    inputmode="numeric"
+                    maxlength="4"
+                    autocomplete="off"
+                    placeholder="••••"
+                    oninput="if(window.checkLoginPin) window.checkLoginPin(false);"
+                    onkeydown="if(event.key==='Enter' && window.checkLoginPin) window.checkLoginPin(true);"
+                    class="font-mono-tech w-full text-center text-xl tracking-[0.5em] font-bold px-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-900 focus:outline-none focus:border-rose-700 focus:ring-2 focus:ring-rose-700/20 transition-all"
+                />
+                <p id="login-error-msg" class="text-[11px] font-semibold text-rose-600 h-4 opacity-0 transition-opacity">
+                    Invalid access code
+                </p>
+                <button
+                    id="login-submit-btn"
+                    type="button"
+                    onclick="if(window.checkLoginPin) window.checkLoginPin(true);"
+                    class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider shadow-md transition-colors cursor-pointer"
+                >
+                    Enter Simulation
+                </button>
+            </div>
         </div>
-        <div class="fh-course-subtitle">
-          <span>Prof. Sven Maričić</span>
-          <span>&bull;</span>
-          <span>Graz, 2026 &mdash; Industrial &amp; Production Engineering</span>
-          <span class="fh-badge">Interactive Course Mindmap</span>
-        </div>
-      </div>
     </div>
-
-    <div class="fh-controls">
-      <div class="search-box">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input
-          type="text"
-          id="mindmapSearch"
-          class="search-input"
-          placeholder="Search topics (e.g., SMA, DLT, DfB)..."
-          aria-label="Search mindmap nodes"
-        />
-      </div>
-      <button type="button" class="fh-btn" id="btnExpand" title="Expand all branches">Expand All</button>
-      <button type="button" class="fh-btn" id="btnCollapse" title="Collapse to main chapters">Chapters Only</button>
-      <button type="button" class="fh-btn fh-btn-primary" id="btnFit" title="Center and fit mindmap">Fit View</button>
-    </div>
-  </header>
-
-  <!-- Main SVG Canvas -->
-  <svg id="mindmap"></svg>
-
-  <!-- Section Color Legend -->
-  <div class="fh-legend" aria-hidden="true">
-    <span class="legend-item"><span class="legend-dot" style="background:#C8102E;"></span>Core &amp; SOTA</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#195FA5;"></span>1. Intro &amp; Lean</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#00877D;"></span>2. IIoT, DLT &amp; XR</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#D27D0A;"></span>3. Bio-Mfg (BMS/SMA)</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#4F46E5;"></span>4. IMS &amp; Gen. Design</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#475569;"></span>6. Dual VET &amp; Start-ups</span>
-  </div>
-
-  <!-- Libraries: D3 v7, Markmap View, Markmap Toolbar -->
-  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.17.2/dist/browser/index.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.17.2/dist/index.js"></script>
-
-  <script>
-    (function () {
-      "use strict";
-
-      // ========================================================================
-      // Complete Structured Knowledge Graph from (Maricic, 2026) Beamer Slides
-      // ========================================================================
-      const mindmapData = {
-        content: "<strong>Advanced Digital &amp; Bio-Intelligent Manufacturing</strong> <span class='node-tag node-tag-red'>2026</span>",
-        children: [
-          {
-            content: "<strong>1. Introduction &amp; Engineering Problem Solving</strong>",
-            children: [
-              {
-                content: "Digital Identity &amp; Industry 5.0 Vision",
-                children: [
-                  { content: "International R&amp;D Networks (Graz &bull; Pula &bull; Cloud)" },
-                  { content: "Human-Centric Transition to Industry 5.0 <span class='node-tag'>Xu et al., 2021</span>" },
-                  { content: "Creative Engineering Pillars: Biomimetics, Interdisciplinary Teams &amp; Simulation" }
-                ]
-              },
-              {
-                content: "Problem Solving Paradigms (Rational vs. Organic)",
-                children: [
-                  {
-                    content: "Linear Programming (LP)",
-                    children: [
-                      { content: "Exact Global Optimization: min c<sup>T</sup>x s.t. Ax &le; b, x &ge; 0" },
-                      { content: "Deterministic Resource Allocation &amp; Network Routing" }
-                    ]
-                  },
-                  {
-                    content: "Heuristic Programming",
-                    children: [
-                      { content: "Representation, Search &amp; Termination Heuristics" },
-                      { content: "Rapid Shop-Floor Decision Pruning under Computational Limits" }
-                    ]
-                  },
-                  {
-                    content: "Evolutionary &amp; Bio-Algorithms",
-                    children: [
-                      { content: "Population Loop: Initialization &rarr; Selection &rarr; Crossover &rarr; Mutation" },
-                      { content: "Non-Convex &amp; Nonlinear Engineering Optimization" }
-                    ]
-                  }
-                ]
-              },
-              {
-                content: "5-Step Engineering Decision Guidelines",
-                children: [
-                  { content: "1. Define Problem (What, Where, How, Why &mdash; Systemic Focus)" },
-                  { content: "2. Identify Root Causes &amp; Multidisciplinary Alternatives" },
-                  { content: "3. Plan Implementation for Long-Term Structural Resilience" },
-                  { content: "4. Monitor via Quantitative Pre-Defined KPIs" },
-                  { content: "5. Verify via Boolean Checks &amp; Archive Validated Protocols" }
-                ]
-              },
-              {
-                content: "Design Thinking &amp; Lean Manufacturing Tools",
-                children: [
-                  {
-                    content: "5-Stage Design Thinking Method",
-                    children: [
-                      { content: "1. Empathise &rarr; 2. Define &rarr; 3. Ideate &rarr; 4. Prototype &rarr; 5. Test" },
-                      { content: "Iterative Non-Linear Feedback Loops (Lean UX + Agile)" }
-                    ]
-                  },
-                  { content: "KPI Analytics: Collect &rarr; Analyze/Benchmark &rarr; Improve" },
-                  { content: "Kaizen Continuous Cycle: Measure, Ideate, Repeat, Standard, Innovate, Compare" },
-                  { content: "Poka-Yoke (Shigeo Shingo): Physical &amp; Digital Mistake-Proofing" }
-                ]
-              }
-            ]
-          },
-          {
-            content: "<strong>2. Digital Technologies &amp; Blockchain Ecosystems</strong>",
-            children: [
-              {
-                content: "Industrial IoT (IIoT) &amp; Artificial Intelligence (AI)",
-                children: [
-                  { content: "IIoT Layer: Real-Time OEE Telemetry, Smart Microgrids &amp; Water/Waste Loops" },
-                  { content: "AI Engine: Predictive Maintenance, Renewable Load Optimization &amp; Inline Vision QA" }
-                ]
-              },
-              {
-                content: "Blockchain in Production Engineering <span class='node-tag node-tag-teal'>DLT</span>",
-                children: [
-                  { content: "Adoption Momentum: 24% CEOs Piloting &bull; 62% Active Mfg. Initiatives" },
-                  {
-                    content: "5 Architectural Pillars",
-                    children: [
-                      { content: "01 Distributed Ledger (No Single Point of Failure)" },
-                      { content: "02 Cryptographic Data Blocks (SHA-256 Digital Thread)" },
-                      { content: "03 Consensus Verification (Trustless Multi-Tier Validation)" },
-                      { content: "04 Immutable Audit History (Digital Product Passports)" },
-                      { content: "05 Smart Contracts (Automated QA, SLA &amp; Settlement)" }
-                    ]
-                  },
-                  {
-                    content: "Industrial Use Cases &amp; Quantified Gains",
-                    children: [
-                      { content: "Aerospace: 100% Part Traceability &amp; +45% Aftermarket Asset Value" },
-                      { content: "Supply Chain: Provenance Tracking Cut from 7 Days to 2.2 s (Walmart)" },
-                      { content: "2030 Metrics: 90% Audit Efficiency &bull; -55% Audit Time &bull; -20% Defects" },
-                      { content: "4 Best Practices: Pilot ROI, Ecosystem Onboarding, Hybrid Governance, Risk Mitigation" }
-                    ]
-                  }
-                ]
-              },
-              {
-                content: "Simulation-Driven AM, XR &amp; Tech Maturity",
-                children: [
-                  { content: "Topology Synthesis: CAD Envelope &rarr; FEA Load Paths &rarr; Bionic AM (-68% Mass)" },
-                  { content: "Extended Reality (VR/AR): Spatial Digital Twins, Turbomachinery QA &amp; Operator Training" },
-                  { content: "Technology Maturity Cycle: DNA Storage &rarr; Bio-BMS &rarr; Agentic AI in CAD &rarr; XR Twins" }
-                ]
-              }
-            ]
-          },
-          {
-            content: "<strong>3. Biological Manufacturing Systems (BMS) &amp; SMA</strong>",
-            children: [
-              {
-                content: "Biologicalisation in Manufacturing <span class='node-tag node-tag-amber'>CIRP</span>",
-                children: [
-                  { content: "DNA-Type Information: Inheritable Generative Product Genomes (Ueda et al.)" },
-                  { content: "BN-Type (Brain-Nervous) Control: Self-Organizing &amp; Self-Healing Swarm Cells" },
-                  { content: "Morphogenesis: Structural Growth Along Principal Stress Trajectories" }
-                ]
-              },
-              {
-                content: "Slime Mould Algorithm (SMA) &amp; Optimization",
-                children: [
-                  { content: "Inspiration: <em>Physarum polycephalum</em> Fault-Tolerant Vascular Pathfinding" },
-                  { content: "Mathematical Model: Global Exploration, Bio-Wave Search (W) &amp; Local Exploitation" },
-                  { content: "Hybrid Variants: CCHSMA (Chaotic-Competitive + CMA-ES/HHO) &amp; RCLSMAOA" },
-                  { content: "Mechanical Benchmarks: Welded Beam, Pressure Vessel, Gear Train &amp; 3-Bar Truss" }
-                ]
-              },
-              {
-                content: "SMA in 3D Additive Design: PIX Moving &amp; WAAM",
-                children: [
-                  { content: "Bionic Autonomous Vehicle Chassis via Wire Arc Additive Manufacturing (WAAM)" },
-                  { content: "Industrial Impact: <strong>-60% Manufacturing Cost</strong> &amp; <strong>-75% Lead-Time</strong>" },
-                  { content: "R&amp;D Roadmap: Multi-Objective Pareto SMA (MOSMA) &amp; Physics-Informed AI Surrogates" }
-                ]
-              }
-            ]
-          },
-          {
-            content: "<strong>4. Intelligent Manufacturing Systems (IMS) &amp; Gen. Design</strong>",
-            children: [
-              {
-                content: "Cyber-Physical Production Systems (CPPS)",
-                children: [
-                  { content: "Physical Layer: Robotic Cells, 5-Axis CNC/Metal AM &amp; Autonomous AMR Fleets" },
-                  { content: "Edge Middleware: OPC-UA, MQTT &amp; Node-RED Real-Time Control" },
-                  { content: "AI Cognitive Layer: Closed-Loop Quality Assurance &amp; Autonomous Reconfiguration" }
-                ]
-              },
-              {
-                content: "Cloud Manufacturing &amp; Blocktrust",
-                children: [
-                  { content: "Virtualized Capability Pool (Metal AM, Multi-Axis CNC, Metrology, CAE)" },
-                  { content: "Blocktrust Smart-Contract Layer: Pay-As-You-Go SLA Verification (Barenji, 2021)" }
-                ]
-              },
-              {
-                content: "Node-RED &amp; Mobile WebApp CNC Digital Twin",
-                children: [
-                  { content: "Bidirectional Architecture: HTML5/WebGL PWA &harr; Edge WSS/REST &harr; Virtual/Physical CNC" },
-                  { content: "Mobile HMI Views: Live 2.5D XY Toolpath DRO &amp; Spindle Power P<sub>c</sub>(t) Telemetry" },
-                  { content: "Event-Driven Simulation Loop: Soft-Limit Poka-Yoke Guard, Feed Overrides &amp; E-Stop Retract" }
-                ]
-              },
-              {
-                content: "Generative Design Approach",
-                children: [
-                  { content: "AI/Bio-Algorithmic Synthesis vs. Manual Classic CAD Iteration" },
-                  { content: "Evaluation Loop: Constraints &rarr; Rule-Set Algorithm &rarr; Convergence &rarr; Validated AM" },
-                  { content: "Aerospace &amp; Robotics: Airbus Bionic Brackets (-45–55% Mass) &amp; End-Effector (142g &rarr; 94g)" }
-                ]
-              }
-            ]
-          },
-          {
-            content: "<strong>5. State of the Art Synthesis (2023&ndash;2026)</strong> <span class='node-tag node-tag-red'>NEW</span>",
-            children: [
-              {
-                content: "1/5: Bio-Inspired Innovation &amp; Convergent Mfg. (Malshe et al., 2023)",
-                children: [
-                  { content: "3 Survival Pillars: Multifunctionality, Resilience &amp; Frugality (&ge;10&times; Resource Cut)" },
-                  { content: "ISO 18458 Mimicry Classes 1&ndash;4: Trabecular Bone Morphogenesis (-57% Contact Pressure)" },
-                  { content: "Convergent Manufacturing Pyramid: Point-of-Need (PoN) In-Space, Cellular &amp; Bio-AM" }
-                ]
-              },
-              {
-                content: "2/5: Bio-Intelligent Mfg. &amp; SME 5.0 (Emer et al., 2025)",
-                children: [
-                  { content: "PRISMA SLR (79 &rarr; 11 Core Studies): Categorizes 13 Industrial Applications" },
-                  { content: "Narrow View (Bio-Integrated + AI) vs. Broader View (Bio-Inspired + AI)" },
-                  { content: "High SME Fit: Adaptive CNC Milling, CNN-SLM, Robot Swarms, Aquaponics &amp; Waste-to-X" }
-                ]
-              },
-              {
-                content: "3/5: PDEVS Blockchain Factory Evaluation (Mullet et al., 2026)",
-                children: [
-                  { content: "2-Level Parallel-DEVS Simulation (Artis* C++/JSON) + MultiChain BPCAT" },
-                  { content: "Off-Chain Delta Storage Cuts Validator Volume by <strong>-79%</strong> (74.36 GB &rarr; 15.60 GB)" },
-                  { content: "Round-Robin (nPoW) Uses <strong>&gt;5.3&times; Less Energy</strong> than PoW (0.27 vs. 1.71 kWh/day)" }
-                ]
-              },
-              {
-                content: "4/5: Foundations of Design for Biointelligence (Sonnenberg et al., 2026)",
-                children: [
-                  { content: "Gioia Grounded Theory (17 Experts, &kappa; = 0.846) for Hardware + Software + Bioware" },
-                  { content: "5 Challenge Dimensions: n=1 Cell Variance, DBTL Gaps, Interdisciplinarity, Data Silos, Governance" },
-                  { content: "24 DfB Heuristics: AI Surrogates, Continuous Lab Automation, SysML &amp; Boundary Spanners" }
-                ]
-              },
-              {
-                content: "5/5: Cross-Paper &amp; Lecture Synergy Matrix",
-                children: [
-                  { content: "Bio-Heuristics (Sec. 1) &oplus; Trusted DLT/IIoT (Sec. 2) &oplus; BMS/Bionic AM (Sec. 3&ndash;4) &oplus; SME Skills (Sec. 6)" }
-                ]
-              }
-            ]
-          },
-          {
-            content: "<strong>6. Projects, Dual Education System &amp; Start-ups</strong>",
-            children: [
-              {
-                content: "DYNAMIC Dual Engineering Project (Holcim Koromačno)",
-                children: [
-                  { content: "On-Site Mentorship: 3D CAD of Silos, Rotary Kilns, Cement Mills &amp; Robotic Palletizers" },
-                  { content: "Interactive VR &amp; HoloLens 2 Plant Digital Twin for Vocational Training" }
-                ]
-              },
-              {
-                content: "3D4VR European Innovative Teaching Award",
-                children: [
-                  { content: "Tactile 3D Additive Models (Pula Arena for Visually Impaired) + Immersive VR VET" },
-                  { content: "Fusion 360 Lifecycle Time Share: CAD 50% &bull; FEM 15% &bull; Gen. Design 15% &bull; CAM/AM 12%" }
-                ]
-              },
-              {
-                content: "Graph-Based Design Languages &amp; UAV Optimization",
-                children: [
-                  { content: "Digital Product Representation (DiP): Automated Bonnet Geometry Synthesis" },
-                  { content: "UAV Frame Generative Optimization: Mass 750 g &rarr; 586 g (-22%, Safety Factor 3.03)" }
-                ]
-              },
-              {
-                content: "Start-up Initiatives &amp; Engineering Agility",
-                children: [
-                  { content: "Hardware-in-the-Loop Iteration Velocity vs. Administrative Over-Regulation" },
-                  { content: "Smart Regulatory Sandboxes for Aerospace, Mobility &amp; Bio-Mfg. Breakthroughs" }
-                ]
-              }
-            ]
-          }
-        ]
-      };
-
-      // ========================================================================
-      // FH JOANNEUM Branch Color Palette Mapping (Deterministic by Top Chapter)
-      // ========================================================================
-      const chapterColors = [
-        "#195FA5", // Sec 1: Accent Blue
-        "#00877D", // Sec 2: Accent Teal
-        "#D27D0A", // Sec 3: Accent Amber
-        "#4F46E5", // Sec 4: Indigo
-        "#C8102E", // Sec 5: SOTA FH Red
-        "#475569"  // Sec 6: Slate Dark
-      ];
-
-      // Tag every node with its exact tree depth and chapter color index upfront
-      function annotateTree(node, depth = 0, chapterIdx = -1) {
-        node._depth = depth;
-        node._chapterIdx = chapterIdx;
-        if (!node.payload) {
-          // Show root (depth 0) + first layer 1-6 chapters (fold at depth >= 1)
-          node.payload = { fold: depth >= 1 ? 1 : 0 };
-        }
-        if (Array.isArray(node.children)) {
-          node.children.forEach((child, idx) => {
-            const nextChapter = depth === 0 ? idx : chapterIdx;
-            annotateTree(child, depth + 1, nextChapter);
-          });
-        }
-      }
-      annotateTree(mindmapData);
-
-      function getNodeColor(node) {
-        const raw = node && node.data ? node.data : node;
-        const depth = typeof node.depth === "number" ? node.depth : (raw && raw._depth ? raw._depth : 0);
-        if (depth === 0) return "#C8102E";
-        const cIdx = raw && typeof raw._chapterIdx === "number" && raw._chapterIdx >= 0
-          ? raw._chapterIdx % chapterColors.length
-          : 0;
-        return chapterColors[cIdx];
-      }
-
-      // ========================================================================
-      // Initialize Markmap Instance & Toolbar
-      // ========================================================================
-      const { markmap } = window;
-      const svgEl = document.querySelector("#mindmap");
-
-      const options = markmap.deriveOptions({
-        color: getNodeColor,
-        duration: 350,
-        maxWidth: 340,
-        spacingVertical: 10,
-        spacingHorizontal: 90,
-        paddingX: 14,
-        fitRatio: 0.86,
-        autoFit: true
-      });
-
-      const mm = markmap.Markmap.create(svgEl, options, mindmapData);
-      window.mm = mm;
-
-      function fitMindmap() {
-        if (mm && typeof mm.fit === "function") {
-          mm.fit();
-        }
-      }
-
-      // Allow tapping/clicking directly on the topic text/label (or circle) to toggle branch,
-      // while distinguishing a tap from a pan/drag gesture on mobile & desktop.
-      let pointerStart = null;
-
-      svgEl.addEventListener("pointerdown", (e) => {
-        pointerStart = { x: e.clientX, y: e.clientY };
-      }, { passive: true });
-
-      svgEl.addEventListener("click", (e) => {
-        // Ignore if user dragged/panned the canvas
-        if (pointerStart) {
-          const dist = Math.hypot(e.clientX - pointerStart.x, e.clientY - pointerStart.y);
-          if (dist > 8) return;
-        }
-
-        // Ignore clicks on links inside labels if any exist
-        if (e.target.closest("a")) return;
-
-        const nodeGroup = e.target.closest(".markmap-node");
-        if (!nodeGroup) return;
-
-        // If the user tapped the text label instead of the tiny circle, toggle the node
-        const clickedCircle = e.target.closest("circle");
-        if (!clickedCircle) {
-          const d3Node = d3.select(nodeGroup).datum();
-          if (d3Node && d3Node.data && Array.isArray(d3Node.data.children) && d3Node.data.children.length > 0) {
-            mm.toggleNode(d3Node.data);
-          }
-        }
-
-        setTimeout(fitMindmap, 380);
-      });
-
-      // Attach Markmap Floating Toolbar (Bottom-Right)
-      if (markmap && markmap.Toolbar) {
-        const toolbar = markmap.Toolbar.create(mm);
-        if (typeof toolbar.setBrand === "function") {
-          toolbar.setBrand(false);
-        }
-        toolbar.el.setAttribute("style", "position:fixed;bottom:20px;right:20px;z-index:110;");
-        document.body.appendChild(toolbar.el);
-      }
-
-      setTimeout(fitMindmap, 150);
-
-      // ========================================================================
-      // Interactive Tree Helpers: Expand All, Collapse to Chapters, Search
-      // ========================================================================
-      function walkTree(node, callback) {
-        callback(node);
-        if (Array.isArray(node.children)) {
-          node.children.forEach((child) => walkTree(child, callback));
-        }
-      }
-
-      function applyFoldDepth(targetDepth) {
-        walkTree(mindmapData, (n) => {
-          n.payload = Object.assign({}, n.payload, {
-            fold: (n._depth || 0) >= targetDepth ? 1 : 0
-          });
-        });
-        mm.setData(mindmapData);
-        setTimeout(fitMindmap, 380);
-      }
-
-      document.getElementById("btnExpand").addEventListener("click", (e) => {
-        e.preventDefault();
-        applyFoldDepth(99);
-      });
-
-      document.getElementById("btnCollapse").addEventListener("click", (e) => {
-        e.preventDefault();
-        applyFoldDepth(1);
-      });
-
-      document.getElementById("btnFit").addEventListener("click", (e) => {
-        e.preventDefault();
-        fitMindmap();
-      });
-
-      // Live Search & Auto-Expand Matching Branches
-      const searchInput = document.getElementById("mindmapSearch");
-      let searchTimer = null;
-
-      function stripTags(html) {
-        const tmp = document.createElement("div");
-        tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText || "";
-      }
-
-      function filterAndHighlight(node, query) {
-        if (!node._rawContent) {
-          node._rawContent = node.content;
-        }
-        const plainText = stripTags(node._rawContent);
-        let selfMatches = false;
-
-        if (!query) {
-          node.content = node._rawContent;
-        } else {
-          const idx = plainText.toLowerCase().indexOf(query);
-          if (idx !== -1) {
-            selfMatches = true;
-            const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-            const regex = new RegExp(`(${escaped})(?![^<]*>)`, "gi");
-            node.content = node._rawContent.replace(regex, "<span class='search-match'>$1</span>");
-          } else {
-            node.content = node._rawContent;
-          }
-        }
-
-        let childMatches = false;
-        if (Array.isArray(node.children) && node.children.length > 0) {
-          node.children.forEach((child) => {
-            if (filterAndHighlight(child, query)) {
-              childMatches = true;
+    <script>
+        (function initLoginGateEarly() {
+            function getValidPins() {
+                const now = new Date();
+                const dd = String(now.getDate()).padStart(2, '0');
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                return [dd + mm, mm + dd];
             }
-          });
+
+            window.checkLoginPin = function(showErrorOnFail) {
+                const overlay = document.getElementById('login-overlay');
+                const input = document.getElementById('login-password-input');
+                const err = document.getElementById('login-error-msg');
+                if (!overlay || !input) return false;
+
+                const val = (input.value || '').replace(/\D/g, '').trim();
+                const validPins = getValidPins();
+
+                if (validPins.includes(val)) {
+                    if (err) err.classList.add('opacity-0');
+                    overlay.style.opacity = '0';
+                    overlay.style.pointerEvents = 'none';
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        overlay.remove();
+                    }, 350);
+                    return true;
+                } else if (showErrorOnFail || val.length === 4) {
+                    if (err) err.classList.remove('opacity-0');
+                    if (val.length === 4) {
+                        setTimeout(() => {
+                            input.value = '';
+                        }, 250);
+                    }
+                } else if (err) {
+                    err.classList.add('opacity-0');
+                }
+                return false;
+            };
+
+            window.addEventListener('DOMContentLoaded', () => {
+                const input = document.getElementById('login-password-input');
+                if (input) setTimeout(() => input.focus(), 50);
+            });
+        })();
+    </script>
+
+    <!-- Fullscreen 3D Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Live Mobile Camera Feed for Direct AR Overlay -->
+    <video id="ar-camera-video" autoplay playsinline muted class="fixed inset-0 w-full h-full object-cover hidden" style="z-index: -1;"></video>
+
+    <!-- AR Anchor Prompt Banner -->
+    <div id="ar-anchor-prompt" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none text-center px-4">
+        <div class="glass-panel rounded-2xl px-4 py-3 border-2 border-rose-600 shadow-xl">
+            <div class="text-xs font-extrabold uppercase tracking-wider text-rose-700 mb-0.5">Tap Screen to Place CNC</div>
+            <div class="text-[11px] font-medium text-slate-600">Aim at floor or table &amp; tap to fix anchor</div>
+        </div>
+    </div>
+
+    <!-- Top Navigation & Status Bar -->
+    <header class="fixed top-2 sm:top-4 left-2.5 sm:left-4 right-2.5 sm:right-4 z-10 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-1.5 sm:gap-3 pointer-events-none">
+        <div class="flex items-center justify-between sm:justify-start md:justify-center sm:flex-1 gap-2">
+            <div class="glass-panel rounded-xl px-3 sm:px-4 py-1.5 sm:py-2.5 flex items-center gap-2 sm:gap-3 pointer-events-auto">
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                    <span class="w-1 h-3.5 sm:h-4 bg-rose-700 rounded-full inline-block"></span>
+                    <span class="font-extrabold text-[11px] sm:text-sm tracking-tight text-slate-900">FH<span class="text-slate-400 font-normal mx-1">|</span>JOANNEUM</span>
+                </div>
+                <span class="h-3.5 sm:h-4 w-px bg-slate-200"></span>
+                <span class="text-[10px] sm:text-xs font-medium text-slate-500 truncate max-w-[140px] sm:max-w-none">3D CNC Operator Quest</span>
+            </div>
+            <div class="flex sm:hidden glass-panel rounded-xl px-2.5 py-1.5 items-center gap-2 pointer-events-auto">
+                <span class="font-mono-tech text-[10px] font-bold text-slate-800"><span id="xp-value-mobile">0</span> XP</span>
+                <span class="h-3 w-px bg-slate-200"></span>
+                <span class="font-mono-tech text-[10px] font-bold text-rose-600">100%</span>
+            </div>
+        </div>
+
+        <!-- Camera Preset Switcher -->
+        <div class="glass-panel rounded-xl p-1 flex items-center gap-1 pointer-events-auto overflow-x-auto no-scrollbar max-w-full sm:mx-auto">
+            <button data-cam="firstPerson" class="cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition-all bg-slate-900 text-white shadow-sm">
+                1st Person
+            </button>
+            <button data-cam="workzone" class="cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+                Workzone
+            </button>
+            <button data-cam="toolChanger" class="cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+                Tool Changer
+            </button>
+            <button data-cam="orbit" class="cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+                3D Orbit
+            </button>
+            <button id="btn-ar-mode" data-cam="ar" class="cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold text-rose-700 hover:bg-rose-50 transition-all flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-rose-600 inline-block"></span>
+                <span>AR View</span>
+            </button>
+        </div>
+
+        <!-- Operator XP & Safety Streak -->
+        <div class="hidden sm:flex flex-1 justify-end">
+            <div class="glass-panel rounded-xl px-4 py-2 flex items-center gap-4 pointer-events-auto">
+                <div>
+                    <div class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Operator XP</div>
+                    <div class="font-mono-tech text-xs font-bold text-slate-800">
+                        <span id="xp-value">0</span> <span class="text-slate-400 font-normal">/ 600 XP</span>
+                    </div>
+                </div>
+                <span class="h-6 w-px bg-slate-200"></span>
+                <div>
+                    <div class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Safety Streak</div>
+                    <div id="safety-streak" class="font-mono-tech text-xs font-bold text-rose-600">100%</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Left Floating Cards: Step Instruction & DRO -->
+    <aside class="fixed top-[5.25rem] sm:top-20 left-2.5 sm:left-4 right-2.5 sm:right-auto z-10 sm:w-80 flex flex-col gap-1.5 sm:gap-3 pointer-events-none">
+        <div class="glass-panel rounded-xl sm:rounded-2xl p-2.5 sm:p-4 pointer-events-auto">
+            <div class="flex items-center justify-between mb-1">
+                <span id="step-badge" class="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-rose-700">STEP 1 OF 6</span>
+                <div class="flex items-center gap-2">
+                    <span id="power-status" class="font-mono-tech text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">POWER: OFF</span>
+                    <button id="btn-toggle-dro-mobile" type="button" class="sm:hidden text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                        DRO
+                    </button>
+                </div>
+            </div>
+            <h2 id="step-title" class="text-xs sm:text-sm font-bold text-slate-900 mb-0.5 sm:mb-1 leading-snug">1. Energize Main Power &amp; Release E-Stop</h2>
+            <p id="step-desc" class="hidden sm:block text-xs text-slate-500 leading-relaxed mb-3">
+                Turn on the main 400V electrical cabinet switch and unlock the red Mushroom Emergency Stop button.
+            </p>
+            <div class="w-full h-1 sm:h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1.5 sm:mt-0">
+                <div id="quest-progress-bar" class="h-full bg-rose-700 rounded-full transition-all duration-500" style="width: 4%;"></div>
+            </div>
+        </div>
+
+        <!-- CNC Digital Readout (DRO) Card -->
+        <div id="dro-card" class="hidden sm:block glass-panel rounded-xl sm:rounded-2xl p-2.5 sm:p-4 pointer-events-auto">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">CNC Digital Readout (DRO)</span>
+                <span id="dro-tool" class="font-mono-tech text-[9px] sm:text-[10px] font-bold text-slate-600">T00 &middot; EMPTY</span>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5 sm:gap-2 bg-slate-100/90 rounded-xl p-2 sm:p-2.5 mb-2 border border-slate-200/70">
+                <div>
+                    <div class="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase">X-Axis</div>
+                    <div id="dro-x" class="font-mono-tech text-[11px] sm:text-xs font-bold text-slate-800 mt-0.5">87.5</div>
+                </div>
+                <div>
+                    <div class="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase">Y-Axis</div>
+                    <div id="dro-y" class="font-mono-tech text-[11px] sm:text-xs font-bold text-slate-800 mt-0.5">42.5</div>
+                </div>
+                <div>
+                    <div class="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase">Z-Axis</div>
+                    <div id="dro-z" class="font-mono-tech text-[11px] sm:text-xs font-bold text-slate-800 mt-0.5">+76.2</div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between font-mono-tech text-[9px] sm:text-[10px] text-slate-500">
+                <span id="dro-rpm">S: 0 RPM</span>
+                <span id="dro-mode" class="font-semibold text-slate-600">M00 (IDLE)</span>
+            </div>
+
+            <!-- Toolpath Strategy Selector & End-of-Cycle Comparison -->
+            <div class="mt-2 pt-2 border-t border-slate-200/80">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Path Strategy</span>
+                    <button id="btn-compare-paths" type="button" class="hidden text-[9px] font-bold uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300 hover:bg-amber-200 transition-colors cursor-pointer">
+                        Compare Both
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5">
+                    <button id="btn-strat-classic" type="button" class="py-1 px-2 rounded-lg text-[10px] font-bold bg-sky-600 text-white shadow-sm transition-all cursor-pointer">
+                        Classic Raster
+                    </button>
+                    <button id="btn-strat-slime" type="button" class="py-1 px-2 rounded-lg text-[10px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer">
+                        Bio-Slime Mold
+                    </button>
+                </div>
+                <div id="strategy-compare-legend" class="hidden mt-2 p-2 rounded-lg bg-slate-50 border border-slate-200 text-[10px] space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="flex items-center gap-1.5 font-semibold text-slate-700">
+                            <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span>Classic Raster
+                        </span>
+                        <span class="font-mono-tech text-slate-500">100% Len · 90° Turns</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="flex items-center gap-1.5 font-semibold text-slate-700">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span>Bio-Slime Mold
+                        </span>
+                        <span class="font-mono-tech text-emerald-700 font-bold">-18% Time · Smooth</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Non-intrusive Toast Notification -->
+        <div id="toast-box" class="hidden glass-panel rounded-xl px-3 py-2 border-l-4 border-rose-700 text-[11px] sm:text-xs font-medium text-slate-700 pointer-events-auto transition-all">
+            <span id="toast-text">Notification</span>
+        </div>
+    </aside>
+
+    <!-- Mobile AR Placement & Scale Controls Pill -->
+    <div id="ar-controls-bar" class="hidden fixed bottom-[5.2rem] sm:bottom-28 left-2.5 right-2.5 z-20 flex justify-center pointer-events-none">
+        <div class="glass-panel rounded-full px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2 sm:gap-3 pointer-events-auto shadow-lg border border-rose-200">
+            <button id="ar-reanchor-btn" type="button" class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200 cursor-pointer">
+                Re-Anchor
+            </button>
+            <span class="h-4 w-px bg-slate-200"></span>
+            <button id="ar-scale-down" type="button" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm flex items-center justify-center cursor-pointer">-</button>
+            <span id="ar-scale-label" class="font-mono-tech text-[11px] font-bold text-slate-800 w-9 text-center">85%</span>
+            <button id="ar-scale-up" type="button" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm flex items-center justify-center cursor-pointer">+</button>
+            <span class="h-4 w-px bg-slate-200"></span>
+            <button id="ar-exit-btn" type="button" class="text-[11px] font-bold text-slate-700 hover:text-rose-700 cursor-pointer">Exit AR</button>
+        </div>
+    </div>
+
+    <!-- Bottom Operator Control Panel -->
+    <footer class="fixed bottom-2.5 sm:bottom-4 left-2.5 sm:left-4 right-2.5 sm:right-4 z-10 flex justify-center pointer-events-none">
+        <div class="glass-panel rounded-2xl px-2.5 sm:px-4 py-2 sm:py-3 w-full max-w-4xl pointer-events-auto">
+            <div class="flex items-center justify-between mb-1.5 sm:mb-2 px-1">
+                <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400 truncate">
+                    Control Panel &middot; Pinch/Drag to Orbit &middot; Tap Red E-Stop
+                </span>
+                <button id="btn-reset" class="text-[10px] sm:text-[11px] font-semibold text-slate-500 hover:text-rose-700 underline underline-offset-2 transition-colors cursor-pointer shrink-0 ml-2">
+                    Reset
+                </button>
+            </div>
+            <div class="flex sm:grid sm:grid-cols-6 gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-0.5 sm:pb-0" id="step-buttons-grid">
+                <button id="btn-step-1" data-step="1" class="step-btn step-active shrink-0 min-w-[84px] sm:min-w-0 rounded-xl py-1.5 sm:py-2 px-2 sm:px-2.5 bg-white border border-slate-200 text-center cursor-pointer">
+                    <div class="font-mono-tech text-[9px] sm:text-[10px] font-bold text-rose-700">01</div>
+                    <div class="text-[11px] sm:text-xs font-bold text-slate-900 mt-0.5 whitespace-nowrap">Main Power</div>
+                </button>
+                <button id="btn-step-2" data-step="2" class="step-btn shrink-0 min-w-[84px] sm:min-w-0 rounded-xl py-1.5 sm:py-2 px-2 sm:px-2.5 bg-white border border-slate-200 text-center cursor-pointer opacity-75">
+                    <div class="font-mono-tech text-[9px] sm:text-[10px] font-bold text-slate-400">02</div>
+                    <div class="text-[11px] sm:text-xs font-semibold text-slate-700 mt-0.5 whitespace-nowrap">Home Axes</div>
+                </button>
+                <button id="btn-step-3" data-step="3" class="step-btn shrink-0 min-w-[84px] sm:min-w-0 rounded-xl py-1.5 sm:py-2 px-2 sm:px-2.5 bg-white border border-slate-200 text-center cursor-pointer opacity-75">
+                    <div class="font-mono-tech text-[9px] sm:text-[10px] font-bold text-slate-400">03</div>
+                    <div class="text-[11px] sm:text-xs font-semibold text-slate-700 mt-0.5 whitespace-nowrap">Load T01</div>
+                </button>
+                <button id="btn-step-4" data-step="4" class="step-btn shrink-0 min-w-[84px] sm:min-w-0 rounded-xl py-1.5 sm:py-2 px-2 sm:px-2.5 bg-white border border-slate-200 text-center cursor-pointer opacity-75">
+                    <div class="font-mono-tech text-[9px] sm:text-[10px] font-bold text-slate-400">04</div>
+                    <div class="text-[11px] sm:text-xs font-semibold text-slate-700 mt-0.5 whitespace-nowrap">Zero WCS</div>
+                </button>
+                <button id="btn-step-5" data-step="5" class="step-btn shrink-0 min-w-[84px] sm:min-w-0 rounded-xl py-1.5 sm:py-2 px-2 sm:px-2.5 bg-white border border-slate-200 text-center cursor-pointer opacity-75">
+                    <div class="font-mono-tech text-[9px] sm:text-[10px] font-bold text-slate-400">05</div>
+                    <div class="text-[11px] sm:text-xs font-semibold text-slate-700 mt-0.5 whitespace-nowrap">Close Door</div>
+                </button>
+                <button id="btn-step-6" data-step="6" class="step-btn shrink-0 min-w-[84px] sm:min-w-0 rounded-xl py-1.5 sm:py-2 px-2 sm:px-2.5 bg-white border border-slate-200 text-center cursor-pointer opacity-75">
+                    <div class="font-mono-tech text-[9px] sm:text-[10px] font-bold text-slate-400">06</div>
+                    <div class="text-[11px] sm:text-xs font-semibold text-slate-700 mt-0.5 whitespace-nowrap">Cycle Start</div>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- QUEST & MACHINE STATE ---
+        const state = {
+            currentStep: 1,
+            xp: 0,
+            safetyStreak: 100,
+            powerOn: false,
+            booting: false,
+            eStopReleased: false,
+            eStopTriggered: false,
+            axesHomed: false,
+            toolLoaded: false,
+            wcsZeroed: false,
+            doorClosed: false,
+            cycling: false,
+            signalState: 'OFF',
+            activeCameraPreset: 'firstPerson',
+            dro: { x: 87.5, y: 42.5, z: 76.2 },
+            targetDro: { x: 87.5, y: 42.5, z: 76.2 },
+            spindleRpm: 0,
+            targetSpindleRpm: 0,
+            doorProgress: 0,
+            targetDoorProgress: 0,
+            carouselAngle: 0,
+            targetCarouselAngle: 0,
+            eStopOffset: 0,
+            targetEStopOffset: 0,
+            cycleTime: 0,
+            pathStrategy: 'classic',
+            comparingPaths: false,
+            cycleCompleted: false
+        };
+
+        const STEP_INFO = [
+            {
+                badge: 'STEP 1 OF 6',
+                title: '1. Energize Main Power & Release E-Stop',
+                desc: 'Turn on the main 400V electrical cabinet switch and unlock the red Mushroom Emergency Stop button.'
+            },
+            {
+                badge: 'STEP 2 OF 6',
+                title: '2. Reference Return (Home All Axes)',
+                desc: 'Execute machine zero-point return (G28) to synchronize X, Y, and Z linear encoders.'
+            },
+            {
+                badge: 'STEP 3 OF 6',
+                title: '3. Load Tool T01 (10mm Carbide End Mill)',
+                desc: 'Index the 8-station rotary tool changer and clamp T01 into the BT40 spindle taper.'
+            },
+            {
+                badge: 'STEP 4 OF 6',
+                title: '4. Set Work Coordinate System (Zero G54)',
+                desc: 'Touch off the front-left datum corner of the aluminum stock in the vise and zero G54.'
+            },
+            {
+                badge: 'STEP 5 OF 6',
+                title: '5. Close & Interlock Safety Guard Door',
+                desc: 'Slide the polycarbonate guard door closed to engage the electromagnetic safety interlock.'
+            },
+            {
+                badge: 'STEP 6 OF 6',
+                title: '6. Execute CNC Milling Program (Cycle Start)',
+                desc: 'Start the spindle at 12,000 RPM and machine the pocket contour on the aluminum workpiece.'
+            }
+        ];
+
+        // --- THREE.JS OBJECTS ---
+        let scene, camera, renderer, controls, clock;
+        let floorMesh, floorGridHelper;
+        let arActive = false, arAnchored = false, arStream = null, arMachineScale = 0.85, xrSession = null;
+        let arReticleGroup = null, arPlacementPlane = null;
+        let arAnchorWorldPos = new THREE.Vector3(0, -0.85, -1.8);
+        let arDeviceQuat = new THREE.Quaternion(), arBaseYaw = null;
+        let machineGroup, spindleHeadGroup, xCarriageGroup;
+        let tableGroup, doorGroup, carouselGroup, spindleToolMesh, workpieceMachinedCut;
+        let millingPathGroup, millingGuideLine, millingProgressLine, millingSparksGroup, wcsCornerMarker;
+        let classicCompareLine, slimeCompareLine;
+        let millingWaypoints = [];
+        let xDragChainMesh, xDragChainSegments = [];
+        let zDragChainMesh, zDragChainCurve;
+        let towerRedMat, towerYellowMat, towerGreenMat;
+        let hmiCanvas, hmiCtx, hmiTexture, hmiScreenMat;
+        let eStopInteractiveGroup, eStopCapMesh, cycleStartLedMesh;
+        let workLight;
+
+        const raycaster = new THREE.Raycaster();
+        const pointerNdc = new THREE.Vector2();
+        let pointerDownPos = { x: 0, y: 0 };
+
+        // Camera Presets & Smooth Focus Transitions
+        const CAMERA_PRESETS = {
+            firstPerson: {
+                pos: new THREE.Vector3(-0.32, 2.02, 4.18),
+                target: new THREE.Vector3(0.06, 1.54, 0.05)
+            },
+            workzone: {
+                pos: new THREE.Vector3(0.28, 1.92, 1.95),
+                target: new THREE.Vector3(0.10, 1.44, -0.05)
+            },
+            toolChanger: {
+                pos: new THREE.Vector3(0.45, 2.05, 1.85),
+                target: new THREE.Vector3(-0.34, 1.82, -0.18)
+            },
+            orbit: {
+                pos: new THREE.Vector3(2.95, 2.65, 3.65),
+                target: new THREE.Vector3(0.05, 1.48, 0.0)
+            }
+        };
+
+        const STEP_FOCUS_VIEWS = {
+            1: { pos: new THREE.Vector3(1.12, 1.62, 1.86), target: new THREE.Vector3(1.18, 1.48, 0.68) },
+            2: { pos: new THREE.Vector3(0.22, 2.12, 2.35), target: new THREE.Vector3(0.12, 1.88, -0.15) },
+            3: { pos: new THREE.Vector3(0.32, 2.02, 1.82), target: new THREE.Vector3(-0.26, 1.84, -0.18) },
+            4: { pos: new THREE.Vector3(0.24, 1.72, 1.28), target: new THREE.Vector3(0.02, 1.26, 0.02) },
+            5: { pos: new THREE.Vector3(0.32, 1.82, 2.65), target: new THREE.Vector3(0.05, 1.64, 0.56) },
+            6: { pos: new THREE.Vector3(0.36, 1.76, 1.38), target: new THREE.Vector3(0.12, 1.28, -0.04) }
+        };
+
+        let isTransitioningCamera = false;
+        const desiredCamPos = CAMERA_PRESETS.firstPerson.pos.clone();
+        const desiredCamTarget = CAMERA_PRESETS.firstPerson.target.clone();
+
+        let bootStartTime = 0;
+        const BOOT_DURATION = 3.8;
+
+        function initScene() {
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xe6e9ef);
+            scene.fog = new THREE.FogExp2(0xe6e9ef, 0.028);
+
+            const w = window.innerWidth || 1024;
+            const h = window.innerHeight || 768;
+
+            camera = new THREE.PerspectiveCamera(42, w / h, 0.05, 100);
+            camera.position.copy(CAMERA_PRESETS.firstPerson.pos);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+            renderer.setSize(w, h);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.06;
+            renderer.xr.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.copy(CAMERA_PRESETS.firstPerson.target);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.07;
+            controls.maxPolarAngle = Math.PI * 0.495;
+            controls.minDistance = 0.65;
+            controls.maxDistance = 12;
+            controls.touches = {
+                ONE: THREE.TOUCH.ROTATE,
+                TWO: THREE.TOUCH.DOLLY_PAN
+            };
+            controls.update();
+
+            controls.addEventListener('start', () => {
+                isTransitioningCamera = false;
+            });
+
+            clock = new THREE.Clock();
+
+            setupLightsAndFloor();
+            buildCncMachine();
+            buildArPlacementReticle();
+            drawHmiOffScreen();
+            updateSignalTowerLights();
+            updateUI();
+
+            window.addEventListener('resize', onWindowResize);
+            window.addEventListener('deviceorientation', onDeviceOrientation, true);
         }
 
-        const depth = node._depth || 0;
-        node.payload = Object.assign({}, node.payload, {
-          fold: !query
-            ? (depth >= 1 ? 1 : 0)
-            : ((selfMatches || childMatches) ? 0 : 1)
+        function setupLightsAndFloor() {
+            const hemiLight = new THREE.HemisphereLight(0xffffff, 0xcbd5e1, 0.85);
+            hemiLight.position.set(0, 10, 0);
+            scene.add(hemiLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.92);
+            dirLight.position.set(4.5, 8.5, 5.5);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 2048;
+            dirLight.shadow.mapSize.height = 2048;
+            dirLight.shadow.camera.near = 1;
+            dirLight.shadow.camera.far = 22;
+            const d = 3.5;
+            dirLight.shadow.camera.left = -d;
+            dirLight.shadow.camera.right = d;
+            dirLight.shadow.camera.top = d;
+            dirLight.shadow.camera.bottom = -d;
+            dirLight.shadow.bias = -0.0005;
+            scene.add(dirLight);
+
+            const fillLight = new THREE.DirectionalLight(0xe2e8f0, 0.35);
+            fillLight.position.set(-4, 3, -3);
+            scene.add(fillLight);
+
+            // Clean Workshop Floor with Grid
+            const floorGeo = new THREE.PlaneGeometry(40, 40);
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.88, metalness: 0.04 });
+            floorMesh = new THREE.Mesh(floorGeo, floorMat);
+            floorMesh.rotation.x = -Math.PI / 2;
+            floorMesh.receiveShadow = true;
+            scene.add(floorMesh);
+
+            floorGridHelper = new THREE.GridHelper(32, 64, 0x94a3b8, 0xcbd5e1);
+            floorGridHelper.position.y = 0.001;
+            scene.add(floorGridHelper);
+        }
+
+        function buildCncMachine() {
+            machineGroup = new THREE.Group();
+            scene.add(machineGroup);
+
+            const darkBodyMat = new THREE.MeshStandardMaterial({ color: 0x1e242b, roughness: 0.45, metalness: 0.35 });
+            const whiteWallMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.35, metalness: 0.08 });
+            const steelMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.32, metalness: 0.72 });
+            const chromeMat = new THREE.MeshStandardMaterial({ color: 0xdbeafe, roughness: 0.16, metalness: 0.90 });
+            const redAccentMat = new THREE.MeshStandardMaterial({ color: 0xbe123c, roughness: 0.35, metalness: 0.25 });
+
+            // 1. Lower Base Cabinet
+            const baseCabinet = new THREE.Mesh(new THREE.BoxGeometry(1.92, 0.92, 1.24), darkBodyMat);
+            baseCabinet.position.set(0.05, 0.46, 0);
+            baseCabinet.castShadow = true;
+            baseCabinet.receiveShadow = true;
+            machineGroup.add(baseCabinet);
+
+            // Red Accent Trim Stripe
+            const redTrim = new THREE.Mesh(new THREE.BoxGeometry(1.96, 0.075, 1.28), redAccentMat);
+            redTrim.position.set(0.05, 0.955, 0);
+            redTrim.castShadow = true;
+            machineGroup.add(redTrim);
+
+            // 2. Workzone Bed & Enclosure Walls
+            const bedFloor = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.08, 1.18), darkBodyMat);
+            bedFloor.position.set(0.05, 1.03, 0);
+            bedFloor.receiveShadow = true;
+            machineGroup.add(bedFloor);
+
+            const backWall = new THREE.Mesh(new THREE.BoxGeometry(1.86, 1.32, 0.08), whiteWallMat);
+            backWall.position.set(0.05, 1.71, -0.55);
+            backWall.receiveShadow = true;
+            machineGroup.add(backWall);
+
+            const leftWall = new THREE.Mesh(new THREE.BoxGeometry(0.14, 1.32, 1.18), whiteWallMat);
+            leftWall.position.set(-0.81, 1.71, 0);
+            leftWall.castShadow = true;
+            leftWall.receiveShadow = true;
+            machineGroup.add(leftWall);
+
+            const rightPillar = new THREE.Mesh(new THREE.BoxGeometry(0.16, 1.32, 1.18), whiteWallMat);
+            rightPillar.position.set(0.91, 1.71, 0);
+            rightPillar.castShadow = true;
+            rightPillar.receiveShadow = true;
+            machineGroup.add(rightPillar);
+
+            // Top Canopy Header
+            const topCanopy = new THREE.Mesh(new THREE.BoxGeometry(1.98, 0.18, 1.28), darkBodyMat);
+            topCanopy.position.set(0.05, 2.45, 0);
+            topCanopy.castShadow = true;
+            machineGroup.add(topCanopy);
+
+            // Interior LED Work Light
+            workLight = new THREE.PointLight(0xf8fafc, 0.15, 3.5);
+            workLight.position.set(0.10, 2.28, 0.15);
+            machineGroup.add(workLight);
+
+            // 3. 3-Tier Industrial CNC Signal Tower Light (Red / Yellow / Green)
+            buildSignalTower(darkBodyMat);
+
+            // 4. Linear X/Z Guide Rails, Ballscrew & Physics-Simulated Drag Chain
+            buildLinearGuidesAndDragChain(darkBodyMat, steelMat, chromeMat);
+
+            // 5. Spindle Head Assembly (mounted on Z-guide rails)
+            buildSpindleAssembly(steelMat, chromeMat);
+
+            // 6. 8-Station Rotary Tool Changer (ATC) Carousel
+            buildToolChanger(darkBodyMat, steelMat, redAccentMat);
+
+            // 7. T-Slot Worktable, Precision Vise, Workpiece & Toolpaths
+            buildTableViseAndToolpath(darkBodyMat, steelMat);
+
+            // 8. Front Sliding Safety Glass Door
+            buildSlidingDoor(darkBodyMat, redAccentMat);
+
+            // 9. Right-Side Operator Control Console
+            buildOperatorConsole(darkBodyMat, redAccentMat);
+        }
+
+        function buildSignalTower(darkMat) {
+            const towerGroup = new THREE.Group();
+            towerGroup.position.set(0.84, 2.54, -0.18);
+            machineGroup.add(towerGroup);
+
+            const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.028, 0.16, 16), darkMat);
+            pole.position.y = 0.08;
+            towerGroup.add(pole);
+
+            const makeSegment = (y, colorHex) => {
+                const mat = new THREE.MeshStandardMaterial({
+                    color: colorHex,
+                    emissive: new THREE.Color(colorHex),
+                    emissiveIntensity: 0.05,
+                    roughness: 0.25,
+                    metalness: 0.1
+                });
+                const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.044, 0.044, 0.072, 24), mat);
+                lens.position.y = y;
+                towerGroup.add(lens);
+
+                const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.046, 0.046, 0.014, 24), darkMat);
+                collar.position.y = y - 0.041;
+                towerGroup.add(collar);
+                return mat;
+            };
+
+            // Bottom = Green, Middle = Yellow/Amber, Top = Red
+            towerGreenMat = makeSegment(0.20, 0x10b981);
+            towerYellowMat = makeSegment(0.285, 0xf59e0b);
+            towerRedMat = makeSegment(0.37, 0xef4444);
+
+            const topCap = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.046, 0.022, 24), darkMat);
+            topCap.position.y = 0.415;
+            towerGroup.add(topCap);
+        }
+
+        function buildLinearGuidesAndDragChain(darkMat, steelMat, chromeMat) {
+            // Horizontal X-Axis Gantry Bridge mounted on back wall
+            const gantryBeam = new THREE.Mesh(new THREE.BoxGeometry(1.54, 0.26, 0.07), darkMat);
+            gantryBeam.position.set(0.06, 2.02, -0.47);
+            machineGroup.add(gantryBeam);
+
+            // Top & Bottom Precision Linear Guide Rails (X-axis)
+            const topXRail = new THREE.Mesh(new THREE.BoxGeometry(1.48, 0.024, 0.028), chromeMat);
+            topXRail.position.set(0.06, 2.12, -0.425);
+            machineGroup.add(topXRail);
+
+            const botXRail = new THREE.Mesh(new THREE.BoxGeometry(1.48, 0.024, 0.028), chromeMat);
+            botXRail.position.set(0.06, 1.92, -0.425);
+            machineGroup.add(botXRail);
+
+            // Precision Ballscrew Shaft along X-axis
+            const ballscrew = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 1.46, 16), steelMat);
+            ballscrew.rotation.z = Math.PI / 2;
+            ballscrew.position.set(0.06, 2.02, -0.42);
+            machineGroup.add(ballscrew);
+
+            // Cable Tray Shelf below gantry
+            const cableShelf = new THREE.Mesh(new THREE.BoxGeometry(1.42, 0.02, 0.08), darkMat);
+            cableShelf.position.set(0.06, 1.84, -0.44);
+            machineGroup.add(cableShelf);
+
+            // X-Carriage Saddle (moves horizontally along X rails, carries vertical Z-rails)
+            xCarriageGroup = new THREE.Group();
+            xCarriageGroup.position.set(0.12, 2.02, -0.39);
+            machineGroup.add(xCarriageGroup);
+
+            const saddlePlate = new THREE.Mesh(new THREE.BoxGeometry(0.30, 0.34, 0.05), steelMat);
+            xCarriageGroup.add(saddlePlate);
+
+            // 4 Linear Bearing Blocks on X-rails
+            [[-0.10, 0.10], [0.10, 0.10], [-0.10, -0.10], [0.10, -0.10]].forEach(([bx, by]) => {
+                const block = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.042, 0.036), darkMat);
+                block.position.set(bx, by, -0.025);
+                xCarriageGroup.add(block);
+            });
+
+            // Vertical Z-Axis Linear Guide Rails mounted onto X-Carriage
+            [-0.085, 0.085].forEach(zx => {
+                const zRail = new THREE.Mesh(new THREE.BoxGeometry(0.022, 0.34, 0.026), chromeMat);
+                zRail.position.set(zx, 0.0, 0.035);
+                xCarriageGroup.add(zRail);
+            });
+
+            // Physics-Simulated Horizontal X-Axis Energy Drag Chain
+            const chainMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.45, metalness: 0.25 });
+            const linkGeo = new THREE.BoxGeometry(0.032, 0.028, 0.044);
+            xDragChainSegments = [];
+            for (let i = 0; i < 36; i++) {
+                const link = new THREE.Mesh(linkGeo, chainMat);
+                machineGroup.add(link);
+                xDragChainSegments.push(link);
+            }
+
+            // Flexible Vertical Z-Axis Umbilical Cable Tube
+            const zTubeMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.2 });
+            zDragChainCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(0, 2.18, -0.35),
+                new THREE.Vector3(0.14, 2.16, -0.30),
+                new THREE.Vector3(0.12, 2.02, -0.26)
+            ]);
+            zDragChainMesh = new THREE.Mesh(new THREE.TubeGeometry(zDragChainCurve, 16, 0.014, 8, false), zTubeMat);
+            machineGroup.add(zDragChainMesh);
+        }
+
+        function updatePhysicsDragChains(headX, headY, time) {
+            if (!xDragChainSegments.length) return;
+
+            // Constant-length rolling-loop physics along X-axis
+            const xAnchor = -0.58;
+            const yLower = 1.862;
+            const radius = 0.068;
+            const yUpperBase = yLower + 2 * radius;
+            const totalLength = 1.24;
+
+            const span = Math.max(0.12, headX - xAnchor);
+            const bendX = xAnchor + Math.min(totalLength * 0.46, (totalLength + span - Math.PI * radius) * 0.5);
+            const lowerLen = Math.max(0.02, bendX - xAnchor);
+            const arcLen = Math.PI * radius;
+            const upperLen = Math.max(0.02, bendX - headX);
+            const usedLen = lowerLen + arcLen + upperLen;
+
+            const count = xDragChainSegments.length;
+            const vib = state.cycling && !state.eStopTriggered ? Math.sin(time * 42) * 0.0015 : 0;
+
+            for (let i = 0; i < count; i++) {
+                const s = (i / (count - 1)) * usedLen;
+                const link = xDragChainSegments[i];
+                let px, py, rotZ = 0;
+
+                if (s <= lowerLen) {
+                    px = xAnchor + s;
+                    py = yLower;
+                    rotZ = 0;
+                } else if (s <= lowerLen + arcLen) {
+                    const theta = -Math.PI / 2 + ((s - lowerLen) / arcLen) * Math.PI;
+                    px = bendX + Math.cos(theta) * radius;
+                    py = yLower + radius + Math.sin(theta) * radius;
+                    rotZ = theta + Math.PI / 2;
+                } else {
+                    const u = (s - lowerLen - arcLen) / upperLen;
+                    px = bendX - u * upperLen;
+                    // Catenary gravitational sag proportional to span
+                    const sag = Math.sin(u * Math.PI) * (0.012 + upperLen * 0.028) + vib * Math.sin(u * Math.PI);
+                    py = yUpperBase - sag;
+                    rotZ = Math.cos(u * Math.PI) * 0.14;
+                }
+
+                link.position.set(px, py, -0.435);
+                link.rotation.z = rotZ;
+            }
+
+            // Update vertical Z-axis flexible umbilical cable
+            if (zDragChainMesh) {
+                const topAnchor = new THREE.Vector3(headX - 0.11, 2.22, -0.36);
+                const headPort = new THREE.Vector3(headX - 0.06, headY + 0.19, -0.25);
+                const drop = Math.max(0.05, topAnchor.y - headPort.y);
+                const bulge = 0.04 + Math.max(0, 0.28 - drop) * 0.45;
+                const midCtrl = new THREE.Vector3(
+                    headX - 0.12 - bulge * 0.6,
+                    (topAnchor.y + headPort.y) * 0.5 - bulge * 0.35,
+                    -0.29 + bulge * 0.5
+                );
+                zDragChainCurve.points[0].copy(topAnchor);
+                zDragChainCurve.points[1].copy(midCtrl);
+                zDragChainCurve.points[2].copy(headPort);
+
+                zDragChainMesh.geometry.dispose();
+                zDragChainMesh.geometry = new THREE.TubeGeometry(zDragChainCurve, 16, 0.013, 8, false);
+            }
+        }
+
+        function buildSpindleAssembly(steelMat, chromeMat) {
+            spindleHeadGroup = new THREE.Group();
+            spindleHeadGroup.position.set(0.12, 1.98, -0.22);
+            machineGroup.add(spindleHeadGroup);
+
+            // Vertical Headstock Housing
+            const headBox = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.38, 0.26), steelMat);
+            headBox.castShadow = true;
+            spindleHeadGroup.add(headBox);
+
+            // Tapered Spindle Nose
+            const noseMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.3, metalness: 0.8 });
+            const nose = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.058, 0.11, 24), noseMat);
+            nose.position.y = -0.24;
+            nose.castShadow = true;
+            spindleHeadGroup.add(nose);
+
+            // BT40 Tool Holder + T01 End Mill (initially hidden until Step 03)
+            spindleToolMesh = new THREE.Group();
+            spindleToolMesh.position.y = -0.32;
+            spindleToolMesh.visible = false;
+            spindleHeadGroup.add(spindleToolMesh);
+
+            const holder = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.030, 0.075, 20), noseMat);
+            spindleToolMesh.add(holder);
+
+            const fluteMat = new THREE.MeshStandardMaterial({ color: 0x648894, roughness: 0.22, metalness: 0.85 });
+            const cutter = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.105, 16), fluteMat);
+            cutter.position.y = -0.088;
+            spindleToolMesh.add(cutter);
+        }
+
+        function buildToolChanger(darkMat, steelMat, redMat) {
+            carouselGroup = new THREE.Group();
+            carouselGroup.position.set(-0.34, 1.82, -0.45);
+            machineGroup.add(carouselGroup);
+
+            const drum = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.05, 32), darkMat);
+            drum.rotation.x = Math.PI / 2;
+            drum.castShadow = true;
+            carouselGroup.add(drum);
+
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const r = 0.155;
+                const pocket = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.022, 0.022, 0.06, 16),
+                    i === 0 ? redMat : steelMat
+                );
+                pocket.rotation.x = Math.PI / 2;
+                pocket.position.set(Math.cos(angle) * r, Math.sin(angle) * r, 0.015);
+                carouselGroup.add(pocket);
+            }
+        }
+
+        function buildTableViseAndToolpath(darkMat, steelMat) {
+            tableGroup = new THREE.Group();
+            tableGroup.position.set(0.08, 1.11, -0.05);
+            machineGroup.add(tableGroup);
+
+            // T-Slot Machine Table
+            const tableSlab = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.08, 0.44), steelMat);
+            tableSlab.castShadow = true;
+            tableSlab.receiveShadow = true;
+            tableGroup.add(tableSlab);
+
+            // Precision Milling Vise
+            const viseBase = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.055, 0.28), darkMat);
+            viseBase.position.y = 0.068;
+            viseBase.castShadow = true;
+            tableGroup.add(viseBase);
+
+            const fixedJaw = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.085, 0.28), steelMat);
+            fixedJaw.position.set(-0.18, 0.132, 0);
+            fixedJaw.castShadow = true;
+            tableGroup.add(fixedJaw);
+
+            const movableJaw = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.085, 0.28), steelMat);
+            movableJaw.position.set(0.18, 0.132, 0);
+            movableJaw.castShadow = true;
+            tableGroup.add(movableJaw);
+
+            // Raw Aluminum Stock Block (Top surface local Y = 0.174)
+            const stockMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.28, metalness: 0.72 });
+            const stockBlock = new THREE.Mesh(new THREE.BoxGeometry(0.30, 0.08, 0.22), stockMat);
+            stockBlock.position.set(0, 0.134, 0);
+            stockBlock.castShadow = true;
+            stockBlock.receiveShadow = true;
+            tableGroup.add(stockBlock);
+
+            // Machined Pocket Floor Overlay
+            const pocketMat = new THREE.MeshStandardMaterial({
+                color: 0x1d4ed8,
+                roughness: 0.35,
+                metalness: 0.5,
+                transparent: true,
+                opacity: 0.0
+            });
+            workpieceMachinedCut = new THREE.Mesh(new THREE.PlaneGeometry(0.22, 0.14), pocketMat);
+            workpieceMachinedCut.rotation.x = -Math.PI / 2;
+            workpieceMachinedCut.position.set(0, 0.1755, 0);
+            tableGroup.add(workpieceMachinedCut);
+
+            // Front-Left G54 Datum Corner Marker (localX = -0.13, localZ = +0.09)
+            wcsCornerMarker = new THREE.Group();
+            wcsCornerMarker.position.set(-0.13, 0.176, 0.09);
+            wcsCornerMarker.visible = false;
+            tableGroup.add(wcsCornerMarker);
+
+            const outerRing = new THREE.Mesh(
+                new THREE.RingGeometry(0.008, 0.015, 24),
+                new THREE.MeshBasicMaterial({ color: 0xf43f5e, side: THREE.DoubleSide })
+            );
+            outerRing.rotation.x = -Math.PI / 2;
+            wcsCornerMarker.add(outerRing);
+
+            const centerDot = new THREE.Mesh(
+                new THREE.CircleGeometry(0.005, 16),
+                new THREE.MeshBasicMaterial({ color: 0xfef08a, side: THREE.DoubleSide })
+            );
+            centerDot.rotation.x = -Math.PI / 2;
+            centerDot.position.y = 0.0005;
+            wcsCornerMarker.add(centerDot);
+
+            // 3D Pocket Milling Toolpath Group on Top Face of Stock
+            millingPathGroup = new THREE.Group();
+            millingPathGroup.position.set(0, 0.1765, 0);
+            millingPathGroup.visible = false;
+            tableGroup.add(millingPathGroup);
+
+            rebuildToolpathGeometry();
+        }
+
+        function getStrategyWaypoints(strategy) {
+            if (strategy === 'slime') {
+                // Bio-Slime Mold (Physarum-inspired adaptive smooth organic vascular path)
+                const pts = [];
+                const steps = 64;
+                for (let i = 0; i <= steps; i++) {
+                    const t = i / steps;
+                    const angle = t * Math.PI * 5.0;
+                    const env = 1.0 - 0.82 * t;
+                    const rx = 0.095 * env + 0.008 * Math.sin(angle * 3.0);
+                    const rz = 0.056 * env + 0.006 * Math.cos(angle * 2.0);
+                    pts.push(new THREE.Vector3(Math.cos(angle) * rx, 0.001, Math.sin(angle) * rz));
+                }
+                return pts;
+            }
+            // Classic Cartesian Contour + Raster Zig-Zag Clearing
+            return [
+                new THREE.Vector3(-0.095, 0.001, 0.055),
+                new THREE.Vector3(0.095, 0.001, 0.055),
+                new THREE.Vector3(0.095, 0.001, -0.055),
+                new THREE.Vector3(-0.095, 0.001, -0.055),
+                new THREE.Vector3(-0.095, 0.001, 0.036),
+                new THREE.Vector3(0.075, 0.001, 0.036),
+                new THREE.Vector3(0.075, 0.001, 0.012),
+                new THREE.Vector3(-0.075, 0.001, 0.012),
+                new THREE.Vector3(-0.075, 0.001, -0.012),
+                new THREE.Vector3(0.075, 0.001, -0.012),
+                new THREE.Vector3(0.075, 0.001, -0.036),
+                new THREE.Vector3(-0.075, 0.001, -0.036)
+            ];
+        }
+
+        function rebuildToolpathGeometry() {
+            if (!millingPathGroup) return;
+            while (millingPathGroup.children.length > 0) {
+                const c = millingPathGroup.children[0];
+                millingPathGroup.remove(c);
+                if (c.geometry) c.geometry.dispose();
+            }
+
+            millingWaypoints = getStrategyWaypoints(state.pathStrategy);
+            const isSlime = state.pathStrategy === 'slime';
+
+            // 1. Programmed Guide Path Line
+            const guideGeo = new THREE.BufferGeometry().setFromPoints(millingWaypoints);
+            const guideMat = new THREE.LineBasicMaterial({
+                color: isSlime ? 0xf59e0b : 0x38bdf8,
+                transparent: true,
+                opacity: 0.72
+            });
+            millingGuideLine = new THREE.Line(guideGeo, guideMat);
+            millingPathGroup.add(millingGuideLine);
+
+            // 2. Progressive Cut Trail Line
+            const maxPts = millingWaypoints.length + 2;
+            const progPositions = new Float32Array(maxPts * 3);
+            const progGeo = new THREE.BufferGeometry();
+            progGeo.setAttribute('position', new THREE.BufferAttribute(progPositions, 3));
+            progGeo.setDrawRange(0, 0);
+            const progMat = new THREE.LineBasicMaterial({
+                color: isSlime ? 0xfbbf24 : 0x34d399
+            });
+            millingProgressLine = new THREE.Line(progGeo, progMat);
+            millingProgressLine.position.y = 0.0012;
+            millingPathGroup.add(millingProgressLine);
+
+            // 3. Comparison Overlay Lines (shown when Compare Both is toggled)
+            const classicPts = getStrategyWaypoints('classic');
+            classicCompareLine = new THREE.Line(
+                new THREE.BufferGeometry().setFromPoints(classicPts),
+                new THREE.LineBasicMaterial({ color: 0x0284c7 })
+            );
+            classicCompareLine.position.y = 0.0018;
+            classicCompareLine.visible = state.comparingPaths;
+            millingPathGroup.add(classicCompareLine);
+
+            const slimePts = getStrategyWaypoints('slime');
+            slimeCompareLine = new THREE.Line(
+                new THREE.BufferGeometry().setFromPoints(slimePts),
+                new THREE.LineBasicMaterial({ color: 0xf59e0b })
+            );
+            slimeCompareLine.position.y = 0.0024;
+            slimeCompareLine.visible = state.comparingPaths;
+            millingPathGroup.add(slimeCompareLine);
+
+            // 4. Cutter Contact Spark Ring
+            millingSparksGroup = new THREE.Group();
+            const ringGeo = new THREE.RingGeometry(0.006, 0.014, 20);
+            const ringMat = new THREE.MeshBasicMaterial({
+                color: isSlime ? 0xfde047 : 0x6ee7b7,
+                side: THREE.DoubleSide
+            });
+            const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+            ringMesh.rotation.x = -Math.PI / 2;
+            millingSparksGroup.add(ringMesh);
+            millingSparksGroup.position.copy(millingWaypoints[0]);
+            millingPathGroup.add(millingSparksGroup);
+        }
+
+        function updateMillingPathProgress(progress) {
+            if (!millingWaypoints || millingWaypoints.length < 2 || !millingProgressLine) return null;
+            const totalSegs = millingWaypoints.length - 1;
+            const scaled = Math.max(0, Math.min(1, progress)) * totalSegs;
+            const segIdx = Math.min(totalSegs - 1, Math.floor(scaled));
+            const segT = scaled - segIdx;
+
+            const currentTip = new THREE.Vector3().lerpVectors(
+                millingWaypoints[segIdx],
+                millingWaypoints[segIdx + 1],
+                segT
+            );
+
+            const posAttr = millingProgressLine.geometry.attributes.position;
+            let count = 0;
+            for (let i = 0; i <= segIdx; i++) {
+                posAttr.setXYZ(count++, millingWaypoints[i].x, millingWaypoints[i].y, millingWaypoints[i].z);
+            }
+            posAttr.setXYZ(count++, currentTip.x, currentTip.y, currentTip.z);
+            posAttr.needsUpdate = true;
+            millingProgressLine.geometry.setDrawRange(0, count);
+
+            if (millingSparksGroup) {
+                millingSparksGroup.position.set(currentTip.x, 0.0025, currentTip.z);
+                const pulse = 1.0 + 0.25 * Math.sin(clock.getElapsedTime() * 28);
+                millingSparksGroup.scale.set(pulse, 1, pulse);
+            }
+
+            return currentTip;
+        }
+
+        function buildSlidingDoor(darkMat, redMat) {
+            const topTrack = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.06, 0.07), darkMat);
+            topTrack.position.set(0.06, 2.34, 0.61);
+            machineGroup.add(topTrack);
+
+            const bottomTrack = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.06, 0.07), darkMat);
+            bottomTrack.position.set(0.06, 1.01, 0.61);
+            machineGroup.add(bottomTrack);
+
+            doorGroup = new THREE.Group();
+            doorGroup.position.set(0.52, 1.675, 0.58);
+            machineGroup.add(doorGroup);
+
+            const glassMat = new THREE.MeshPhysicalMaterial({
+                color: 0xe0f2fe,
+                transparent: true,
+                opacity: 0.26,
+                roughness: 0.08,
+                metalness: 0.05,
+                reflectivity: 0.9,
+                depthWrite: false
+            });
+            const glassPane = new THREE.Mesh(new THREE.BoxGeometry(1.06, 1.26, 0.018), glassMat);
+            doorGroup.add(glassPane);
+
+            const leftStile = new THREE.Mesh(new THREE.BoxGeometry(0.03, 1.28, 0.03), darkMat);
+            leftStile.position.x = -0.53;
+            doorGroup.add(leftStile);
+
+            // Vertical Red Handle at far-left edge so it never blocks the tool view
+            const handle = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.28, 0.045), redMat);
+            handle.position.set(-0.50, 0.04, 0.032);
+            handle.castShadow = true;
+            doorGroup.add(handle);
+        }
+
+        function buildOperatorConsole(darkMat, redMat) {
+            const consoleGroup = new THREE.Group();
+            consoleGroup.position.set(1.18, 1.48, 0.68);
+            consoleGroup.rotation.y = -0.22;
+            machineGroup.add(consoleGroup);
+
+            const arm = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.08, 0.08), darkMat);
+            arm.position.set(-0.26, -0.05, -0.06);
+            consoleGroup.add(arm);
+
+            const box = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.64, 0.14), darkMat);
+            box.castShadow = true;
+            consoleGroup.add(box);
+
+            hmiCanvas = document.createElement('canvas');
+            hmiCanvas.width = 512;
+            hmiCanvas.height = 384;
+            hmiCtx = hmiCanvas.getContext('2d');
+            hmiTexture = new THREE.CanvasTexture(hmiCanvas);
+            hmiTexture.encoding = THREE.sRGBEncoding;
+
+            hmiScreenMat = new THREE.MeshStandardMaterial({
+                map: hmiTexture,
+                emissiveMap: hmiTexture,
+                emissive: new THREE.Color(0xffffff),
+                emissiveIntensity: 0.25,
+                roughness: 0.22,
+                metalness: 0.1
+            });
+
+            const screenMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 0.27), hmiScreenMat);
+            screenMesh.position.set(0, 0.11, 0.072);
+            consoleGroup.add(screenMesh);
+
+            eStopInteractiveGroup = new THREE.Group();
+            eStopInteractiveGroup.position.set(-0.11, -0.17, 0.074);
+            consoleGroup.add(eStopInteractiveGroup);
+
+            const yellowCollar = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.046, 0.046, 0.014, 24),
+                new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.3 })
+            );
+            yellowCollar.rotation.x = Math.PI / 2;
+            yellowCollar.name = 'estop_collar';
+            eStopInteractiveGroup.add(yellowCollar);
+
+            eStopCapMesh = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.036, 0.030, 0.032, 24),
+                redMat
+            );
+            eStopCapMesh.rotation.x = Math.PI / 2;
+            eStopCapMesh.position.set(0, 0, 0.022);
+            eStopCapMesh.name = 'estop_cap';
+            eStopInteractiveGroup.add(eStopCapMesh);
+
+            const greenBtnMat = new THREE.MeshStandardMaterial({
+                color: 0x10b981,
+                emissive: 0x10b981,
+                emissiveIntensity: 0.15,
+                roughness: 0.25
+            });
+            cycleStartLedMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.022, 20), greenBtnMat);
+            cycleStartLedMesh.rotation.x = Math.PI / 2;
+            cycleStartLedMesh.position.set(0.11, -0.17, 0.078);
+            consoleGroup.add(cycleStartLedMesh);
+        }
+
+        function drawHmiOffScreen() {
+            if (!hmiCtx) return;
+            hmiCtx.fillStyle = '#070b12';
+            hmiCtx.fillRect(0, 0, 512, 384);
+
+            hmiCtx.strokeStyle = '#1e293b';
+            hmiCtx.lineWidth = 4;
+            hmiCtx.strokeRect(12, 12, 488, 360);
+
+            hmiCtx.fillStyle = '#334155';
+            hmiCtx.font = 'bold 20px "JetBrains Mono", monospace';
+            hmiCtx.fillText('FH JOANNEUM CNC-840D', 36, 64);
+
+            hmiCtx.fillStyle = '#475569';
+            hmiCtx.font = '16px "JetBrains Mono", monospace';
+            hmiCtx.fillText('MAIN POWER: OFF (400V ISOLATED)', 36, 108);
+            hmiCtx.fillText('E-STOP CIRCUIT: ENGAGED', 36, 140);
+
+            hmiCtx.fillStyle = '#1e293b';
+            hmiCtx.fillRect(36, 290, 440, 44);
+            hmiCtx.fillStyle = '#64748b';
+            hmiCtx.font = 'bold 15px "JetBrains Mono", monospace';
+            hmiCtx.fillText('PRESS [01 MAIN POWER] TO ENERGIZE', 54, 318);
+
+            if (hmiScreenMat) hmiScreenMat.emissiveIntensity = 0.22;
+            if (hmiTexture) hmiTexture.needsUpdate = true;
+        }
+
+        function drawHmiBootScreen(elapsedBoot) {
+            if (!hmiCtx) return;
+            const progress = Math.min(1, elapsedBoot / BOOT_DURATION);
+
+            hmiCtx.fillStyle = '#060d18';
+            hmiCtx.fillRect(0, 0, 512, 384);
+
+            hmiCtx.fillStyle = '#be123c';
+            hmiCtx.fillRect(16, 16, 480, 42);
+            hmiCtx.fillStyle = '#ffffff';
+            hmiCtx.font = 'bold 18px "JetBrains Mono", monospace';
+            hmiCtx.fillText('FH | JOANNEUM  SINUMERIK OS v4.9', 28, 43);
+
+            const lines = [
+                { t: 0.05, text: '[ OK ] 400V 3-Phase Main Bus Energized' },
+                { t: 0.22, text: '[ OK ] E-Stop Dual-Channel Loop Unlocked' },
+                { t: 0.40, text: '[ OK ] Initializing Realtime PLC Kernel...' },
+                { t: 0.58, text: '[ OK ] Servo Drives X / Y / Z Online' },
+                { t: 0.76, text: '[ OK ] ATC 8-Station Carousel Synced' },
+                { t: 0.90, text: '[READY] CNC Control System Online' }
+            ];
+
+            hmiCtx.font = '15px "JetBrains Mono", monospace';
+            lines.forEach((line, idx) => {
+                if (progress >= line.t) {
+                    hmiCtx.fillStyle = idx === lines.length - 1 ? '#34d399' : '#38bdf8';
+                    hmiCtx.fillText(line.text, 28, 96 + idx * 32);
+                }
+            });
+
+            if (Math.floor(elapsedBoot * 6) % 2 === 0 && progress < 1) {
+                hmiCtx.fillStyle = '#38bdf8';
+                hmiCtx.fillRect(28, 288, 12, 18);
+            }
+
+            hmiCtx.strokeStyle = '#38bdf8';
+            hmiCtx.lineWidth = 2;
+            hmiCtx.strokeRect(28, 322, 456, 28);
+            hmiCtx.fillStyle = '#0284c7';
+            hmiCtx.fillRect(32, 326, Math.floor(448 * progress), 20);
+
+            hmiCtx.fillStyle = '#f8fafc';
+            hmiCtx.font = 'bold 14px "JetBrains Mono", monospace';
+            hmiCtx.fillText(`LOADING SYSTEM... ${Math.round(progress * 100)}%`, 165, 341);
+
+            if (hmiScreenMat) hmiScreenMat.emissiveIntensity = 1.05;
+            if (hmiTexture) hmiTexture.needsUpdate = true;
+
+            if (progress >= 1) {
+                state.booting = false;
+            }
+        }
+
+        function drawHmiAlarmScreen() {
+            if (!hmiCtx) return;
+            hmiCtx.fillStyle = '#2a060d';
+            hmiCtx.fillRect(0, 0, 512, 384);
+
+            hmiCtx.fillStyle = '#be123c';
+            hmiCtx.fillRect(14, 14, 484, 46);
+            hmiCtx.fillStyle = '#ffffff';
+            hmiCtx.font = 'bold 19px "JetBrains Mono", monospace';
+            hmiCtx.fillText('ALARM 3000 · EMERGENCY STOP ACTIVE', 26, 44);
+
+            hmiCtx.fillStyle = '#fecdd3';
+            hmiCtx.font = 'bold 16px "JetBrains Mono", monospace';
+            hmiCtx.fillText('ALL DRIVES & SPINDLE HALTED (STO)', 28, 98);
+
+            hmiCtx.fillStyle = '#fda4af';
+            hmiCtx.font = '15px "JetBrains Mono", monospace';
+            hmiCtx.fillText(`FROZEN X: ${state.dro.x.toFixed(1)} mm`, 28, 142);
+            hmiCtx.fillText(`FROZEN Y: ${state.dro.y.toFixed(1)} mm`, 28, 172);
+            hmiCtx.fillText(`FROZEN Z: ${(state.dro.z >= 0 ? '+' : '') + state.dro.z.toFixed(1)} mm`, 28, 202);
+            hmiCtx.fillText('SPINDLE : 0 RPM (BRAKE ENGAGED)', 28, 232);
+
+            hmiCtx.fillStyle = '#881337';
+            hmiCtx.fillRect(28, 292, 456, 52);
+            hmiCtx.fillStyle = '#fef08a';
+            hmiCtx.font = 'bold 14px "JetBrains Mono", monospace';
+            hmiCtx.fillText('CLICK RED E-STOP MUSHROOM TO RELEASE', 48, 323);
+
+            if (hmiScreenMat) hmiScreenMat.emissiveIntensity = 1.05;
+            if (hmiTexture) hmiTexture.needsUpdate = true;
+        }
+
+        function drawHmiActiveScreen() {
+            if (!hmiCtx) return;
+            hmiCtx.fillStyle = '#09121e';
+            hmiCtx.fillRect(0, 0, 512, 384);
+
+            // Top Banner
+            hmiCtx.fillStyle = state.cycling ? '#065f46' : '#1e293b';
+            hmiCtx.fillRect(14, 14, 484, 40);
+            hmiCtx.fillStyle = '#f8fafc';
+            hmiCtx.font = 'bold 16px "JetBrains Mono", monospace';
+            hmiCtx.fillText(
+                state.cycling ? 'AUTO · O1001_POCKET.MPF [RUN]' : 'JOG / MDI · G54 WCS READY',
+                26,
+                40
+            );
+
+            // Live G-Code Preview Block during execution
+            if (state.cycling || state.cycleCompleted) {
+                const gcodeLines = state.pathStrategy === 'slime'
+                    ? [
+                        'N010 G54 G90 G17 G21',
+                        'N020 T01 M06 (D10 ENDMILL)',
+                        'N030 S12000 M03',
+                        'N040 G00 X-13.0 Y+9.0 Z5.0',
+                        'N050 G01 Z-2.0 F450',
+                        'N060 G05.1 Q1 (PHYSARUM SMOOTH)',
+                        'N070 G02 X9.5 Y0.0 I-4.2 J-3.1',
+                        'N080 G03 X-6.4 Y4.8 I2.9 J4.0',
+                        'N090 G02 X4.1 Y-3.5 I-1.8 J-2.4',
+                        'N100 G03 X0.0 Y0.0 I1.1 J1.4',
+                        'N110 G00 Z50.0 M05',
+                        'N120 M30 (END OF PROGRAM)'
+                    ]
+                    : [
+                        'N010 G54 G90 G17 G21',
+                        'N020 T01 M06 (D10 ENDMILL)',
+                        'N030 S12000 M03',
+                        'N040 G00 X-13.0 Y+9.0 Z5.0',
+                        'N050 G01 Z-2.0 F450',
+                        'N060 G01 X+9.5 Y+5.5 F1400',
+                        'N070 G01 X+9.5 Y-5.5',
+                        'N080 G01 X-9.5 Y-5.5',
+                        'N090 G01 X-9.5 Y+3.6',
+                        'N100 G01 X+7.5 Y+3.6',
+                        'N110 G00 Z50.0 M05',
+                        'N120 M30 (END OF PROGRAM)'
+                    ];
+
+                const prog = state.cycleCompleted ? 1 : Math.min(1, state.cycleTime / 14.0);
+                const activeIdx = state.cycleCompleted
+                    ? gcodeLines.length - 1
+                    : Math.min(9, 4 + Math.floor(prog * 6));
+                const startRow = Math.max(0, activeIdx - 2);
+
+                hmiCtx.fillStyle = '#0f172a';
+                hmiCtx.fillRect(16, 64, 480, 174);
+                hmiCtx.strokeStyle = '#334155';
+                hmiCtx.lineWidth = 2;
+                hmiCtx.strokeRect(16, 64, 480, 174);
+
+                hmiCtx.font = '14px "JetBrains Mono", monospace';
+                for (let r = 0; r < 6; r++) {
+                    const lineIdx = startRow + r;
+                    if (lineIdx >= gcodeLines.length) break;
+                    const yPos = 90 + r * 26;
+                    if (lineIdx === activeIdx) {
+                        hmiCtx.fillStyle = '#047857';
+                        hmiCtx.fillRect(22, yPos - 17, 468, 22);
+                        hmiCtx.fillStyle = '#ecfdf5';
+                        hmiCtx.fillText('▶ ' + gcodeLines[lineIdx], 28, yPos);
+                    } else {
+                        hmiCtx.fillStyle = '#94a3b8';
+                        hmiCtx.fillText('  ' + gcodeLines[lineIdx], 28, yPos);
+                    }
+                }
+
+                // Compact Live WCS Coordinates + Progress Bar
+                hmiCtx.fillStyle = '#38bdf8';
+                hmiCtx.font = 'bold 15px "JetBrains Mono", monospace';
+                hmiCtx.fillText(
+                    `X:${state.dro.x.toFixed(1)}  Y:${state.dro.y.toFixed(1)}  Z:${state.dro.z.toFixed(1)}`,
+                    24,
+                    272
+                );
+                hmiCtx.fillStyle = '#34d399';
+                hmiCtx.fillText(`S:${Math.round(state.spindleRpm)} RPM  ${Math.round(prog * 100)}%`, 24, 302);
+
+                hmiCtx.strokeStyle = '#34d399';
+                hmiCtx.strokeRect(24, 322, 464, 24);
+                hmiCtx.fillStyle = '#10b981';
+                hmiCtx.fillRect(28, 326, Math.floor(456 * prog), 16);
+            } else {
+                // Standard Large WCS Readout
+                hmiCtx.fillStyle = '#0f172a';
+                hmiCtx.fillRect(18, 70, 476, 176);
+
+                hmiCtx.font = 'bold 26px "JetBrains Mono", monospace';
+                hmiCtx.fillStyle = '#38bdf8';
+                hmiCtx.fillText(`X  ${state.dro.x.toFixed(2)} mm`, 38, 118);
+                hmiCtx.fillText(`Y  ${state.dro.y.toFixed(2)} mm`, 38, 168);
+                hmiCtx.fillText(`Z  ${(state.dro.z >= 0 ? '+' : '') + state.dro.z.toFixed(2)} mm`, 38, 218);
+
+                hmiCtx.fillStyle = '#cbd5e1';
+                hmiCtx.font = '16px "JetBrains Mono", monospace';
+                hmiCtx.fillText(`TOOL: ${state.toolLoaded ? 'T01 (D10 ENDMILL)' : 'T00 (EMPTY)'}`, 24, 282);
+                hmiCtx.fillText(`DOOR: ${state.doorClosed ? 'LOCKED' : 'OPEN'}   SPINDLE: ${Math.round(state.spindleRpm)} RPM`, 24, 314);
+            }
+
+            if (hmiScreenMat) hmiScreenMat.emissiveIntensity = 1.0;
+            if (hmiTexture) hmiTexture.needsUpdate = true;
+        }
+
+        function updateSignalTowerLights() {
+            if (!towerRedMat || !towerYellowMat || !towerGreenMat) return;
+            towerRedMat.emissiveIntensity = 0.05;
+            towerYellowMat.emissiveIntensity = 0.05;
+            towerGreenMat.emissiveIntensity = 0.05;
+
+            if (state.signalState === 'ALARM') {
+                towerRedMat.emissiveIntensity = 1.6;
+            } else if (state.signalState === 'IDLE_READY') {
+                towerYellowMat.emissiveIntensity = 1.4;
+            } else if (state.signalState === 'RUNNING') {
+                towerGreenMat.emissiveIntensity = 1.5;
+            }
+        }
+
+        function buildArPlacementReticle() {
+            arReticleGroup = new THREE.Group();
+            arReticleGroup.visible = false;
+
+            const outer = new THREE.Mesh(
+                new THREE.RingGeometry(0.28, 0.34, 36),
+                new THREE.MeshBasicMaterial({ color: 0xbe123c, side: THREE.DoubleSide })
+            );
+            outer.rotation.x = -Math.PI / 2;
+            arReticleGroup.add(outer);
+
+            const inner = new THREE.Mesh(
+                new THREE.CircleGeometry(0.06, 24),
+                new THREE.MeshBasicMaterial({ color: 0xfef08a, side: THREE.DoubleSide })
+            );
+            inner.rotation.x = -Math.PI / 2;
+            inner.position.y = 0.002;
+            arReticleGroup.add(inner);
+
+            scene.add(arReticleGroup);
+
+            arPlacementPlane = new THREE.Mesh(
+                new THREE.PlaneGeometry(30, 30),
+                new THREE.MeshBasicMaterial({ visible: false })
+            );
+            arPlacementPlane.rotation.x = -Math.PI / 2;
+            arPlacementPlane.position.y = -0.85;
+            scene.add(arPlacementPlane);
+        }
+
+        function onDeviceOrientation(e) {
+            if (!arActive || !arAnchored || e.alpha === null) return;
+            const alpha = THREE.MathUtils.degToRad(e.alpha);
+            if (arBaseYaw === null) arBaseYaw = alpha;
+            const deltaYaw = alpha - arBaseYaw;
+            if (machineGroup) {
+                machineGroup.rotation.y = deltaYaw * 0.45;
+            }
+        }
+
+        async function enterArMode() {
+            const video = document.getElementById('ar-camera-video');
+            const bar = document.getElementById('ar-controls-bar');
+            const prompt = document.getElementById('ar-anchor-prompt');
+
+            try {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    arStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: { ideal: 'environment' } },
+                        audio: false
+                    });
+                    video.srcObject = arStream;
+                    await video.play();
+                    video.classList.remove('hidden');
+                }
+            } catch (err) {
+                showToast('Camera permission unavailable — using AR tabletop preview.');
+            }
+
+            arActive = true;
+            arAnchored = false;
+            arBaseYaw = null;
+            scene.background = null;
+            scene.fog = null;
+            if (floorMesh) floorMesh.visible = false;
+            if (floorGridHelper) floorGridHelper.visible = false;
+
+            machineGroup.visible = false;
+            machineGroup.scale.setScalar(arMachineScale);
+            if (arReticleGroup) {
+                arReticleGroup.visible = true;
+                arReticleGroup.position.set(0, -0.85, -1.8);
+            }
+
+            camera.position.set(0, 0.35, 0.4);
+            controls.target.set(0, -0.65, -1.8);
+            controls.update();
+
+            if (bar) bar.classList.remove('hidden');
+            if (prompt) prompt.classList.remove('hidden');
+            setActiveCamPill('ar');
+        }
+
+        function exitArMode() {
+            const video = document.getElementById('ar-camera-video');
+            const bar = document.getElementById('ar-controls-bar');
+            const prompt = document.getElementById('ar-anchor-prompt');
+
+            if (arStream) {
+                arStream.getTracks().forEach(t => t.stop());
+                arStream = null;
+            }
+            if (video) {
+                video.srcObject = null;
+                video.classList.add('hidden');
+            }
+
+            arActive = false;
+            arAnchored = false;
+            scene.background = new THREE.Color(0xe6e9ef);
+            scene.fog = new THREE.FogExp2(0xe6e9ef, 0.028);
+            if (floorMesh) floorMesh.visible = true;
+            if (floorGridHelper) floorGridHelper.visible = true;
+
+            machineGroup.visible = true;
+            machineGroup.position.set(0, 0, 0);
+            machineGroup.rotation.set(0, 0, 0);
+            machineGroup.scale.setScalar(1);
+            if (arReticleGroup) arReticleGroup.visible = false;
+
+            if (bar) bar.classList.add('hidden');
+            if (prompt) prompt.classList.add('hidden');
+            applyCameraPreset('firstPerson');
+        }
+
+        function setActiveCamPill(camKey) {
+            document.querySelectorAll('.cam-pill').forEach(btn => {
+                const isMatch = btn.dataset.cam === camKey;
+                if (btn.id === 'btn-ar-mode') {
+                    btn.className = isMatch
+                        ? 'cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition-all bg-rose-700 text-white shadow-sm flex items-center gap-1.5'
+                        : 'cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold text-rose-700 hover:bg-rose-50 transition-all flex items-center gap-1.5';
+                } else {
+                    btn.className = isMatch
+                        ? 'cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition-all bg-slate-900 text-white shadow-sm'
+                        : 'cam-pill shrink-0 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all';
+                }
+            });
+        }
+
+        function applyCameraPreset(presetKey) {
+            if (presetKey === 'ar') {
+                if (!arActive) enterArMode();
+                return;
+            }
+            if (arActive) {
+                exitArMode();
+                return;
+            }
+            const preset = CAMERA_PRESETS[presetKey];
+            if (!preset) return;
+            state.activeCameraPreset = presetKey;
+            desiredCamPos.copy(preset.pos);
+            desiredCamTarget.copy(preset.target);
+            isTransitioningCamera = true;
+            setActiveCamPill(presetKey);
+        }
+
+        function focusStepCamera(stepNum) {
+            if (arActive) return;
+            const view = STEP_FOCUS_VIEWS[stepNum];
+            if (!view) return;
+            desiredCamPos.copy(view.pos);
+            desiredCamTarget.copy(view.target);
+            isTransitioningCamera = true;
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const box = document.getElementById('toast-box');
+            const text = document.getElementById('toast-text');
+            if (!box || !text) return;
+            text.textContent = msg;
+            box.classList.remove('hidden');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => box.classList.add('hidden'), 3400);
+        }
+
+        function triggerOrReleaseEStop() {
+            if (!state.eStopTriggered) {
+                state.eStopTriggered = true;
+                state.cycling = false;
+                state.booting = false;
+                state.targetSpindleRpm = 0;
+                state.spindleRpm = 0;
+                state.targetDro.x = state.dro.x;
+                state.targetDro.y = state.dro.y;
+                state.targetDro.z = state.dro.z;
+                state.targetEStopOffset = -0.012;
+                state.signalState = 'ALARM';
+                updateSignalTowerLights();
+                drawHmiAlarmScreen();
+                showToast('EMERGENCY STOP PRESSED! All axes and spindle halted.');
+            } else {
+                state.eStopTriggered = false;
+                state.targetEStopOffset = 0.008;
+                state.signalState = state.powerOn ? 'IDLE_READY' : 'OFF';
+                updateSignalTowerLights();
+                if (!state.powerOn) drawHmiOffScreen();
+                showToast('Emergency Stop released. Ready to resume operations.');
+            }
+            updateUI();
+        }
+
+        function handleStepAction(stepNum) {
+            if (state.eStopTriggered) {
+                showToast('E-Stop is active! Click the red mushroom E-Stop button on the console to release.');
+                return;
+            }
+            if (stepNum > state.currentStep) {
+                showToast(`Complete Step 0${state.currentStep} first.`);
+                return;
+            }
+            if (stepNum < state.currentStep) {
+                focusStepCamera(stepNum);
+                return;
+            }
+
+            focusStepCamera(stepNum);
+
+            if (stepNum === 1) {
+                state.powerOn = true;
+                state.eStopReleased = true;
+                state.booting = true;
+                bootStartTime = clock.getElapsedTime();
+                state.targetEStopOffset = 0.008;
+                state.signalState = 'IDLE_READY';
+                if (workLight) workLight.intensity = 0.95;
+                updateSignalTowerLights();
+                state.xp = 100;
+                state.currentStep = 2;
+                showToast('400V Main Power energized. Booting CNC controller...');
+            } else if (stepNum === 2) {
+                state.axesHomed = true;
+                state.targetDro = { x: 0.0, y: 0.0, z: 0.0 };
+                state.xp = 200;
+                state.currentStep = 3;
+                showToast('G28 Reference Return complete: X0.0 Y0.0 Z0.0');
+            } else if (stepNum === 3) {
+                state.toolLoaded = true;
+                state.targetCarouselAngle = Math.PI * 0.5;
+                if (spindleToolMesh) spindleToolMesh.visible = true;
+                state.xp = 300;
+                state.currentStep = 4;
+                showToast('Tool T01 (10mm Carbide End Mill) clamped in BT40 spindle.');
+            } else if (stepNum === 4) {
+                state.wcsZeroed = true;
+                // Align tool tip directly over front-left datum corner (localX = -0.13, localZ = +0.09)
+                // Table center X = 0.08, Spindle Z = -0.22 => target headWorldX = 0.08 - 0.13 = -0.05 (dro.x = -170), tableWorldZ = -0.22 - 0.09 = -0.31 (dro.y = -57.2)
+                state.targetDro = { x: -170.0, y: -57.2, z: -42.0 };
+                if (wcsCornerMarker) wcsCornerMarker.visible = true;
+                state.xp = 400;
+                state.currentStep = 5;
+                showToast('G54 Work Coordinate System zeroed at front-left stock corner.');
+            } else if (stepNum === 5) {
+                state.doorClosed = true;
+                state.targetDoorProgress = 1;
+                state.xp = 500;
+                state.currentStep = 6;
+                showToast('Safety guard door closed and interlocked.');
+            } else if (stepNum === 6) {
+                state.cycling = true;
+                state.cycleCompleted = false;
+                state.cycleTime = 0;
+                state.targetSpindleRpm = 12000;
+                state.signalState = 'RUNNING';
+                updateSignalTowerLights();
+                if (millingPathGroup) millingPathGroup.visible = true;
+                updateMillingPathProgress(0);
+                state.xp = 600;
+                showToast('Cycle Start active — executing pocket milling program.');
+            }
+
+            updateUI();
+        }
+
+        function resetSimulation() {
+            state.currentStep = 1;
+            state.xp = 0;
+            state.powerOn = false;
+            state.booting = false;
+            state.eStopReleased = false;
+            state.eStopTriggered = false;
+            state.axesHomed = false;
+            state.toolLoaded = false;
+            state.wcsZeroed = false;
+            state.doorClosed = false;
+            state.cycling = false;
+            state.cycleCompleted = false;
+            state.comparingPaths = false;
+            state.cycleTime = 0;
+            state.signalState = 'OFF';
+            state.dro = { x: 87.5, y: 42.5, z: 76.2 };
+            state.targetDro = { x: 87.5, y: 42.5, z: 76.2 };
+            state.spindleRpm = 0;
+            state.targetSpindleRpm = 0;
+            state.doorProgress = 0;
+            state.targetDoorProgress = 0;
+            state.carouselAngle = 0;
+            state.targetCarouselAngle = 0;
+            state.eStopOffset = 0;
+            state.targetEStopOffset = 0;
+
+            if (workLight) workLight.intensity = 0.15;
+            if (spindleToolMesh) spindleToolMesh.visible = false;
+            if (wcsCornerMarker) wcsCornerMarker.visible = false;
+            if (millingPathGroup) millingPathGroup.visible = false;
+            if (workpieceMachinedCut) workpieceMachinedCut.material.opacity = 0;
+
+            const compareBtn = document.getElementById('btn-compare-paths');
+            const compareLegend = document.getElementById('strategy-compare-legend');
+            if (compareBtn) compareBtn.classList.add('hidden');
+            if (compareLegend) compareLegend.classList.add('hidden');
+
+            rebuildToolpathGeometry();
+            updateSignalTowerLights();
+            drawHmiOffScreen();
+            if (!arActive) applyCameraPreset('firstPerson');
+            updateUI();
+            showToast('Simulation reset to initial state.');
+        }
+
+        function updateUI() {
+            const info = STEP_INFO[Math.min(state.currentStep - 1, STEP_INFO.length - 1)];
+            document.getElementById('step-badge').textContent = state.eStopTriggered ? 'ALARM · E-STOP' : info.badge;
+            document.getElementById('step-title').textContent = state.eStopTriggered
+                ? 'EMERGENCY STOP ACTIVE'
+                : info.title;
+            document.getElementById('step-desc').textContent = state.eStopTriggered
+                ? 'Click the red Mushroom E-Stop button on the 3D console to release the alarm.'
+                : info.desc;
+
+            const powerEl = document.getElementById('power-status');
+            if (state.eStopTriggered) {
+                powerEl.textContent = 'E-STOP';
+                powerEl.className = 'font-mono-tech text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-rose-600';
+            } else if (state.powerOn) {
+                powerEl.textContent = 'POWER: ON';
+                powerEl.className = 'font-mono-tech text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-600';
+            } else {
+                powerEl.textContent = 'POWER: OFF';
+                powerEl.className = 'font-mono-tech text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500';
+            }
+
+            const pct = state.cycleCompleted ? 100 : Math.max(4, Math.round(((state.currentStep - 1) / 6) * 100));
+            document.getElementById('quest-progress-bar').style.width = pct + '%';
+
+            document.getElementById('xp-value').textContent = state.xp;
+            const mobXp = document.getElementById('xp-value-mobile');
+            if (mobXp) mobXp.textContent = state.xp;
+
+            document.getElementById('dro-tool').textContent = state.toolLoaded ? 'T01 · D10 EM' : 'T00 · EMPTY';
+            document.getElementById('dro-x').textContent = state.dro.x.toFixed(1);
+            document.getElementById('dro-y').textContent = state.dro.y.toFixed(1);
+            document.getElementById('dro-z').textContent = (state.dro.z >= 0 ? '+' : '') + state.dro.z.toFixed(1);
+            document.getElementById('dro-rpm').textContent = `S: ${Math.round(state.spindleRpm)} RPM`;
+            document.getElementById('dro-mode').textContent = state.eStopTriggered
+                ? 'ALARM (STOP)'
+                : state.cycling
+                ? 'M03 (AUTO RUN)'
+                : 'M00 (IDLE)';
+
+            for (let i = 1; i <= 6; i++) {
+                const btn = document.getElementById(`btn-step-${i}`);
+                if (!btn) continue;
+                btn.classList.remove('step-active', 'step-completed', 'opacity-75');
+                if (i < state.currentStep || (i === 6 && state.cycleCompleted)) {
+                    btn.classList.add('step-completed');
+                } else if (i === state.currentStep && !state.eStopTriggered) {
+                    btn.classList.add('step-active');
+                } else {
+                    btn.classList.add('opacity-75');
+                }
+            }
+        }
+
+        function setPathStrategy(strategy) {
+            state.pathStrategy = strategy;
+            const btnClassic = document.getElementById('btn-strat-classic');
+            const btnSlime = document.getElementById('btn-strat-slime');
+            if (btnClassic && btnSlime) {
+                if (strategy === 'classic') {
+                    btnClassic.className = 'py-1 px-2 rounded-lg text-[10px] font-bold bg-sky-600 text-white shadow-sm transition-all cursor-pointer';
+                    btnSlime.className = 'py-1 px-2 rounded-lg text-[10px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer';
+                } else {
+                    btnSlime.className = 'py-1 px-2 rounded-lg text-[10px] font-bold bg-amber-500 text-white shadow-sm transition-all cursor-pointer';
+                    btnClassic.className = 'py-1 px-2 rounded-lg text-[10px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all cursor-pointer';
+                }
+            }
+            rebuildToolpathGeometry();
+            if (state.cycleCompleted) {
+                updateMillingPathProgress(1);
+            }
+        }
+
+        function onCanvasPointerDown(e) {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            pointerDownPos = { x: clientX, y: clientY };
+        }
+
+        function onCanvasPointerUp(e) {
+            const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+            const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+            const dist = Math.hypot(clientX - pointerDownPos.x, clientY - pointerDownPos.y);
+            if (dist > 10) return; // Ignore orbit drag gestures
+
+            const rect = renderer.domElement.getBoundingClientRect();
+            pointerNdc.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+            pointerNdc.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+            raycaster.setFromCamera(pointerNdc, camera);
+
+            // 1. AR Anchor Placement Tap
+            if (arActive && !arAnchored && arPlacementPlane) {
+                const hits = raycaster.intersectObject(arPlacementPlane);
+                if (hits.length > 0) {
+                    arAnchorWorldPos.copy(hits[0].point);
+                    machineGroup.position.copy(arAnchorWorldPos);
+                    machineGroup.visible = true;
+                    arAnchored = true;
+                    arBaseYaw = null;
+                    if (arReticleGroup) arReticleGroup.visible = false;
+                    const prompt = document.getElementById('ar-anchor-prompt');
+                    if (prompt) prompt.classList.add('hidden');
+                    showToast('CNC machine anchored in AR space!');
+                }
+                return;
+            }
+
+            // 2. Interactive 3D Emergency Stop Mushroom Button Hit-Test
+            if (eStopInteractiveGroup) {
+                const eStopHits = raycaster.intersectObjects(eStopInteractiveGroup.children, true);
+                if (eStopHits.length > 0) {
+                    triggerOrReleaseEStop();
+                }
+            }
+        }
+
+        function bindEvents() {
+            document.querySelectorAll('.cam-pill').forEach(btn => {
+                btn.addEventListener('click', () => applyCameraPreset(btn.dataset.cam));
+            });
+
+            for (let i = 1; i <= 6; i++) {
+                const btn = document.getElementById(`btn-step-${i}`);
+                if (btn) btn.addEventListener('click', () => handleStepAction(i));
+            }
+
+            document.getElementById('btn-reset').addEventListener('click', resetSimulation);
+
+            const droToggle = document.getElementById('btn-toggle-dro-mobile');
+            if (droToggle) {
+                droToggle.addEventListener('click', () => {
+                    const droCard = document.getElementById('dro-card');
+                    if (droCard) droCard.classList.toggle('hidden');
+                });
+            }
+
+            document.getElementById('btn-strat-classic').addEventListener('click', () => setPathStrategy('classic'));
+            document.getElementById('btn-strat-slime').addEventListener('click', () => setPathStrategy('slime'));
+
+            document.getElementById('btn-compare-paths').addEventListener('click', () => {
+                state.comparingPaths = !state.comparingPaths;
+                if (classicCompareLine) classicCompareLine.visible = state.comparingPaths;
+                if (slimeCompareLine) slimeCompareLine.visible = state.comparingPaths;
+                const legend = document.getElementById('strategy-compare-legend');
+                if (legend) legend.classList.toggle('hidden', !state.comparingPaths);
+            });
+
+            // AR Controls
+            document.getElementById('ar-reanchor-btn').addEventListener('click', () => {
+                arAnchored = false;
+                machineGroup.visible = false;
+                if (arReticleGroup) arReticleGroup.visible = true;
+                const prompt = document.getElementById('ar-anchor-prompt');
+                if (prompt) prompt.classList.remove('hidden');
+            });
+            document.getElementById('ar-scale-down').addEventListener('click', () => {
+                arMachineScale = Math.max(0.35, +(arMachineScale - 0.1).toFixed(2));
+                machineGroup.scale.setScalar(arMachineScale);
+                document.getElementById('ar-scale-label').textContent = Math.round(arMachineScale * 100) + '%';
+            });
+            document.getElementById('ar-scale-up').addEventListener('click', () => {
+                arMachineScale = Math.min(1.5, +(arMachineScale + 0.1).toFixed(2));
+                machineGroup.scale.setScalar(arMachineScale);
+                document.getElementById('ar-scale-label').textContent = Math.round(arMachineScale * 100) + '%';
+            });
+            document.getElementById('ar-exit-btn').addEventListener('click', exitArMode);
+
+            const dom = renderer.domElement;
+            dom.addEventListener('pointerdown', onCanvasPointerDown);
+            dom.addEventListener('pointerup', onCanvasPointerUp);
+        }
+
+        function onWindowResize() {
+            if (!camera || !renderer) return;
+            const w = window.innerWidth || 1024;
+            const h = window.innerHeight || 768;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const dt = Math.min(0.05, clock.getDelta());
+            const elapsed = clock.getElapsedTime();
+
+            // Smooth camera focus transition
+            if (isTransitioningCamera && !arActive) {
+                camera.position.lerp(desiredCamPos, 0.08);
+                controls.target.lerp(desiredCamTarget, 0.08);
+                if (camera.position.distanceTo(desiredCamPos) < 0.008 && controls.target.distanceTo(desiredCamTarget) < 0.008) {
+                    isTransitioningCamera = false;
+                }
+            }
+
+            // AR Placement Reticle tracking while aiming
+            if (arActive && !arAnchored && arReticleGroup && arPlacementPlane) {
+                raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+                const hits = raycaster.intersectObject(arPlacementPlane);
+                if (hits.length > 0) {
+                    arReticleGroup.position.lerp(hits[0].point, 0.25);
+                }
+            }
+
+            // Active Milling Trajectory Execution (Step 06)
+            if (state.cycling && !state.eStopTriggered) {
+                const duration = state.pathStrategy === 'slime' ? 11.5 : 14.0;
+                state.cycleTime += dt;
+                const progress = Math.min(1, state.cycleTime / duration);
+                const tipLocal = updateMillingPathProgress(progress);
+
+                if (tipLocal) {
+                    // Align spindle X (headWorldX = 0.08 + tipLocal.x) & table Z (tableWorldZ = -0.22 - tipLocal.z) directly with the 3D pocket waypoint
+                    state.targetDro.x = (0.08 + tipLocal.x - 0.12) * 1000.0;
+                    state.targetDro.y = (-0.17 - tipLocal.z) * 220.0;
+                    state.targetDro.z = -43.5;
+                    state.dro.x = state.targetDro.x;
+                    state.dro.y = state.targetDro.y;
+                    state.dro.z = state.targetDro.z;
+                }
+
+                if (workpieceMachinedCut) {
+                    workpieceMachinedCut.material.opacity = 0.28 + 0.35 * progress;
+                }
+
+                if (progress >= 1) {
+                    state.cycling = false;
+                    state.cycleCompleted = true;
+                    state.targetSpindleRpm = 0;
+                    state.targetDro = { x: 0.0, y: 0.0, z: 50.0 };
+                    state.signalState = 'IDLE_READY';
+                    updateSignalTowerLights();
+                    const compareBtn = document.getElementById('btn-compare-paths');
+                    if (compareBtn) compareBtn.classList.remove('hidden');
+                    showToast('Machining cycle complete! Click "Compare Both" to inspect path strategies.');
+                }
+            } else if (!state.eStopTriggered) {
+                // Smooth DRO interpolation
+                state.dro.x += (state.targetDro.x - state.dro.x) * 0.12;
+                state.dro.y += (state.targetDro.y - state.dro.y) * 0.12;
+                state.dro.z += (state.targetDro.z - state.dro.z) * 0.12;
+            }
+
+            // Spindle RPM & Rotation
+            state.spindleRpm += (state.targetSpindleRpm - state.spindleRpm) * 0.1;
+            if (spindleToolMesh && state.spindleRpm > 5) {
+                spindleToolMesh.rotation.y += (state.spindleRpm / 60) * dt * 0.4;
+            }
+
+            // Sliding Door Animation
+            state.doorProgress += (state.targetDoorProgress - state.doorProgress) * 0.12;
+            if (doorGroup) {
+                doorGroup.position.x = 0.52 * (1 - state.doorProgress);
+            }
+
+            // ATC Carousel Rotation
+            state.carouselAngle += (state.targetCarouselAngle - state.carouselAngle) * 0.12;
+            if (carouselGroup) {
+                carouselGroup.rotation.z = state.carouselAngle;
+            }
+
+            // E-Stop Button Plunger Offset
+            state.eStopOffset += (state.targetEStopOffset - state.eStopOffset) * 0.2;
+            if (eStopCapMesh) {
+                eStopCapMesh.position.z = 0.022 + state.eStopOffset;
+            }
+
+            // Map DRO coordinates to physical 3D spindle head & worktable positions
+            // Workpiece top surface is at world Y = 1.11 + 0.174 = 1.284; cutter tip is 0.4605 below spindleHeadGroup.y
+            // So at Z = -42.0 (touch-off), spindleHeadGroup.y = 1.284 + 0.4605 = 1.7445
+            const headWorldX = 0.12 + state.dro.x * 0.001;
+            const headWorldY = 1.7445 + (state.dro.z + 42.0) * 0.0022;
+            const tableWorldZ = -0.05 + state.dro.y / 220.0;
+
+            if (spindleHeadGroup) {
+                spindleHeadGroup.position.x = headWorldX;
+                spindleHeadGroup.position.y = headWorldY;
+            }
+            if (xCarriageGroup) {
+                xCarriageGroup.position.x = headWorldX;
+            }
+            if (tableGroup) {
+                tableGroup.position.z = tableWorldZ;
+            }
+
+            // Update physics-based flexible cable / drag chain
+            updatePhysicsDragChains(headWorldX, headWorldY, elapsed);
+
+            // Refresh HMI Console Screen
+            if (state.eStopTriggered) {
+                drawHmiAlarmScreen();
+            } else if (state.booting) {
+                drawHmiBootScreen(elapsed - bootStartTime);
+            } else if (state.powerOn) {
+                drawHmiActiveScreen();
+            }
+
+            // Live HUD Readout Sync
+            document.getElementById('dro-x').textContent = state.dro.x.toFixed(1);
+            document.getElementById('dro-y').textContent = state.dro.y.toFixed(1);
+            document.getElementById('dro-z').textContent = (state.dro.z >= 0 ? '+' : '') + state.dro.z.toFixed(1);
+            document.getElementById('dro-rpm').textContent = `S: ${Math.round(state.spindleRpm)} RPM`;
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('load', () => {
+            initScene();
+            bindEvents();
+            animate();
         });
-
-        return selfMatches || childMatches;
-      }
-
-      searchInput.addEventListener("input", (e) => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => {
-          const q = e.target.value.trim().toLowerCase();
-          filterAndHighlight(mindmapData, q);
-          mm.setData(mindmapData);
-          setTimeout(fitMindmap, 380);
-        }, 180);
-      });
-
-      window.addEventListener("resize", fitMindmap);
-    })();
-  </script>
+    </script>
 </body>
 </html>
