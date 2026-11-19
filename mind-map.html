@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>FH JOANNEUM | New Trends in Advanced Digital & Bio-Intelligent Manufacturing (2026)</title>
+
+  <!-- Markmap Toolbar CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.17.2/dist/style.css" />
+
+  <style>
+    /* ==========================================================================
+       FH JOANNEUM Corporate Identity Tokens & Modern Glassmorphic UI
+       ========================================================================== */
+    :root {
+      --fh-red: #C8102E;         /* RGB(200, 16, 46) */
+      --fh-red-soft: #FCE6EA;    /* softred */
+      --fh-dark: #262A2E;        /* RGB(38, 42, 46) */
+      --fh-gray: #696E73;        /* RGB(105, 110, 115) */
+      --fh-vlight: #F2F3F5;      /* vlightgray */
+      --accent-blue: #195FA5;    /* RGB(25, 95, 165) */
+      --accent-teal: #00877D;    /* RGB(0, 135, 125) */
+      --accent-amber: #D27D0A;   /* RGB(210, 125, 10) */
+      --surface-bg: #F8F9FA;
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --border-subtle: rgba(38, 42, 46, 0.12);
+      --shadow-elevated: 0 10px 30px rgba(38, 42, 46, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--surface-bg);
+      background-image:
+        radial-gradient(rgba(38, 42, 46, 0.08) 1px, transparent 1px),
+        radial-gradient(circle at 12% 15%, rgba(200, 16, 46, 0.04), transparent 35%),
+        radial-gradient(circle at 88% 85%, rgba(25, 95, 165, 0.05), transparent 40%);
+      background-size: 24px 24px, 100% 100%, 100% 100%;
+      color: var(--fh-dark);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ==========================================================================
+       Top FH JOANNEUM Corporate Header Bar
+       ========================================================================== */
+    .fh-header {
+      position: fixed;
+      top: 16px;
+      left: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 20px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-left: 5px solid var(--fh-red);
+      border-radius: 10px;
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .fh-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    /* Vector FH | JOANNEUM Brand Mark */
+    .fh-logo {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      padding-right: 16px;
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    .fh-logo-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: 0.02em;
+      color: var(--fh-dark);
+      line-height: 1;
+    }
+
+    .fh-logo-bar {
+      display: inline-block;
+      width: 5px;
+      height: 18px;
+      background-color: var(--fh-red);
+      border-radius: 1px;
+    }
+
+    .fh-logo-divider {
+      display: inline-block;
+      width: 2px;
+      height: 18px;
+      background-color: var(--fh-red);
+      margin: 0 2px;
+    }
+
+    .fh-logo-sub {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--fh-gray);
+      margin-top: 3px;
+      letter-spacing: 0.01em;
+    }
+
+    .fh-course-meta {
+      min-width: 0;
+    }
+
+    .fh-course-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--fh-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .fh-course-subtitle {
+      font-size: 12px;
+      color: var(--fh-gray);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .fh-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 600;
+      background: var(--fh-red-soft);
+      color: var(--fh-red);
+    }
+
+    /* ==========================================================================
+       Interactive Controls (Search, Expand/Collapse, Fit)
+       ========================================================================== */
+    .fh-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 210px;
+      padding: 7px 12px 7px 30px;
+      font-size: 12.5px;
+      color: var(--fh-dark);
+      background: var(--fh-vlight);
+      border: 1px solid transparent;
+      border-radius: 7px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      background: #ffffff;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(25, 95, 165, 0.14);
+      width: 245px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 9px;
+      width: 14px;
+      height: 14px;
+      color: var(--fh-gray);
+      pointer-events: none;
+    }
+
+    .fh-btn {
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fh-dark);
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .fh-btn:hover {
+      background: var(--fh-vlight);
+      border-color: rgba(38, 42, 46, 0.25);
+    }
+
+    .fh-btn-primary {
+      background: var(--fh-red);
+      color: #ffffff;
+      border-color: var(--fh-red);
+    }
+
+    .fh-btn-primary:hover {
+      background: #a90d26;
+      border-color: #a90d26;
+    }
+
+    /* ==========================================================================
+       Section Legend Pill Bar (Bottom Left)
+       ========================================================================== */
+    .fh-legend {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 90;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(38, 42, 46, 0.06);
+      font-size: 11px;
+      color: var(--fh-gray);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 500;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    /* ==========================================================================
+       Markmap Canvas & Node Styling Overrides
+       ========================================================================== */
+    #mindmap {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Ensure branch connector paths are always crisp and visible */
+    .markmap-link {
+      fill: none !important;
+      stroke-width: 2px;
+      stroke-opacity: 0.85 !important;
+      stroke-linecap: round;
+    }
+
+    .markmap-node circle {
+      cursor: pointer;
+      stroke-width: 2px;
+      transition: r 0.15s ease;
+    }
+
+    .markmap-node {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .markmap-node text,
+    .markmap-foreign {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+      color: var(--fh-dark);
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .markmap-foreign strong {
+      font-weight: 700;
+    }
+
+    .node-tag {
+      display: inline-block;
+      padding: 1px 6px;
+      margin-left: 5px;
+      font-size: 10.5px;
+      font-weight: 600;
+      border-radius: 4px;
+      background: #EEF2F6;
+      color: #195FA5;
+      vertical-align: middle;
+    }
+
+    .node-tag-red {
+      background: #FCE6EA;
+      color: #C8102E;
+    }
+
+    .node-tag-teal {
+      background: #E1F5EB;
+      color: #00877D;
+    }
+
+    .node-tag-amber {
+      background: #FEF2DE;
+      color: #B46506;
+    }
+
+    .search-match {
+      background-color: #FEF08A;
+      color: #1E293B;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    /* Markmap Toolbar Styling */
+    .mm-toolbar {
+      background: var(--card-bg) !important;
+      border: 1px solid var(--border-subtle) !important;
+      border-radius: 8px !important;
+      box-shadow: var(--shadow-elevated) !important;
+      padding: 4px !important;
+    }
+
+    @media (max-width: 960px) {
+      .fh-header {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 12px;
+      }
+      .fh-course-title {
+        font-size: 13.5px;
+        white-space: normal;
+        line-height: 1.25;
+      }
+      .fh-course-subtitle {
+        font-size: 11px;
+      }
+      .fh-controls {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 6px;
+      }
+      .search-box {
+        width: 100%;
+      }
+      .search-input,
+      .search-input:focus {
+        width: 100%;
+        font-size: 14px; /* Prevents iOS auto-zoom on input focus */
+      }
+      .fh-btn {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+      .fh-legend {
+        display: none;
+      }
+      /* Larger touch targets for circles on mobile */
+      .markmap-node circle {
+        r: 6px;
+        stroke-width: 3px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Corporate FH JOANNEUM Header -->
+  <header class="fh-header">
+    <div class="fh-brand-group">
+      <div class="fh-logo" aria-label="FH JOANNEUM University of Applied Sciences">
+        <div class="fh-logo-top">
+          <span class="fh-logo-bar"></span>
+          <span>FH</span>
+          <span class="fh-logo-divider"></span>
+          <span>JOANNEUM</span>
+        </div>
+        <div class="fh-logo-sub">University of Applied Sciences</div>
+      </div>
+
+      <div class="fh-course-meta">
+        <div class="fh-course-title">
+          New Trends in the Era of Advanced Digital and Bio-Intelligent Manufacturing
+        </div>
+        <div class="fh-course-subtitle">
+          <span>Prof. Sven Maričić</span>
+          <span>&bull;</span>
+          <span>Graz, 2026 &mdash; Industrial &amp; Production Engineering</span>
+          <span class="fh-badge">Interactive Course Mindmap</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fh-controls">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          id="mindmapSearch"
+          class="search-input"
+          placeholder="Search topics (e.g., SMA, DLT, DfB)..."
+          aria-label="Search mindmap nodes"
+        />
+      </div>
+      <button type="button" class="fh-btn" id="btnExpand" title="Expand all branches">Expand All</button>
+      <button type="button" class="fh-btn" id="btnCollapse" title="Collapse to main chapters">Chapters Only</button>
+      <button type="button" class="fh-btn fh-btn-primary" id="btnFit" title="Center and fit mindmap">Fit View</button>
+    </div>
+  </header>
+
+  <!-- Main SVG Canvas -->
+  <svg id="mindmap"></svg>
+
+  <!-- Section Color Legend -->
+  <div class="fh-legend" aria-hidden="true">
+    <span class="legend-item"><span class="legend-dot" style="background:#C8102E;"></span>Core &amp; SOTA</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#195FA5;"></span>1. Intro &amp; Lean</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#00877D;"></span>2. IIoT, DLT &amp; XR</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#D27D0A;"></span>3. Bio-Mfg (BMS/SMA)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#4F46E5;"></span>4. IMS &amp; Gen. Design</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#475569;"></span>6. Dual VET &amp; Start-ups</span>
+  </div>
+
+  <!-- Libraries: D3 v7, Markmap View, Markmap Toolbar -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.17.2/dist/browser/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.17.2/dist/index.js"></script>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // ========================================================================
+      // Complete Structured Knowledge Graph from (Maricic, 2026) Beamer Slides
+      // ========================================================================
+      const mindmapData = {
+        content: "<strong>Advanced Digital &amp; Bio-Intelligent Manufacturing</strong> <span class='node-tag node-tag-red'>2026</span>",
+        children: [
+          {
+            content: "<strong>1. Introduction &amp; Engineering Problem Solving</strong>",
+            children: [
+              {
+                content: "Digital Identity &amp; Industry 5.0 Vision",
+                children: [
+                  { content: "International R&amp;D Networks (Graz &bull; Pula &bull; Cloud)" },
+                  { content: "Human-Centric Transition to Industry 5.0 <span class='node-tag'>Xu et al., 2021</span>" },
+                  { content: "Creative Engineering Pillars: Biomimetics, Interdisciplinary Teams &amp; Simulation" }
+                ]
+              },
+              {
+                content: "Problem Solving Paradigms (Rational vs. Organic)",
+                children: [
+                  {
+                    content: "Linear Programming (LP)",
+                    children: [
+                      { content: "Exact Global Optimization: min c<sup>T</sup>x s.t. Ax &le; b, x &ge; 0" },
+                      { content: "Deterministic Resource Allocation &amp; Network Routing" }
+                    ]
+                  },
+                  {
+                    content: "Heuristic Programming",
+                    children: [
+                      { content: "Representation, Search &amp; Termination Heuristics" },
+                      { content: "Rapid Shop-Floor Decision Pruning under Computational Limits" }
+                    ]
+                  },
+                  {
+                    content: "Evolutionary &amp; Bio-Algorithms",
+                    children: [
+                      { content: "Population Loop: Initialization &rarr; Selection &rarr; Crossover &rarr; Mutation" },
+                      { content: "Non-Convex &amp; Nonlinear Engineering Optimization" }
+                    ]
+                  }
+                ]
+              },
+              {
+                content: "5-Step Engineering Decision Guidelines",
+                children: [
+                  { content: "1. Define Problem (What, Where, How, Why &mdash; Systemic Focus)" },
+                  { content: "2. Identify Root Causes &amp; Multidisciplinary Alternatives" },
+                  { content: "3. Plan Implementation for Long-Term Structural Resilience" },
+                  { content: "4. Monitor via Quantitative Pre-Defined KPIs" },
+                  { content: "5. Verify via Boolean Checks &amp; Archive Validated Protocols" }
+                ]
+              },
+              {
+                content: "Design Thinking &amp; Lean Manufacturing Tools",
+                children: [
+                  {
+                    content: "5-Stage Design Thinking Method",
+                    children: [
+                      { content: "1. Empathise &rarr; 2. Define &rarr; 3. Ideate &rarr; 4. Prototype &rarr; 5. Test" },
+                      { content: "Iterative Non-Linear Feedback Loops (Lean UX + Agile)" }
+                    ]
+                  },
+                  { content: "KPI Analytics: Collect &rarr; Analyze/Benchmark &rarr; Improve" },
+                  { content: "Kaizen Continuous Cycle: Measure, Ideate, Repeat, Standard, Innovate, Compare" },
+                  { content: "Poka-Yoke (Shigeo Shingo): Physical &amp; Digital Mistake-Proofing" }
+                ]
+              }
+            ]
+          },
+          {
+            content: "<strong>2. Digital Technologies &amp; Blockchain Ecosystems</strong>",
+            children: [
+              {
+                content: "Industrial IoT (IIoT) &amp; Artificial Intelligence (AI)",
+                children: [
+                  { content: "IIoT Layer: Real-Time OEE Telemetry, Smart Microgrids &amp; Water/Waste Loops" },
+                  { content: "AI Engine: Predictive Maintenance, Renewable Load Optimization &amp; Inline Vision QA" }
+                ]
+              },
+              {
+                content: "Blockchain in Production Engineering <span class='node-tag node-tag-teal'>DLT</span>",
+                children: [
+                  { content: "Adoption Momentum: 24% CEOs Piloting &bull; 62% Active Mfg. Initiatives" },
+                  {
+                    content: "5 Architectural Pillars",
+                    children: [
+                      { content: "01 Distributed Ledger (No Single Point of Failure)" },
+                      { content: "02 Cryptographic Data Blocks (SHA-256 Digital Thread)" },
+                      { content: "03 Consensus Verification (Trustless Multi-Tier Validation)" },
+                      { content: "04 Immutable Audit History (Digital Product Passports)" },
+                      { content: "05 Smart Contracts (Automated QA, SLA &amp; Settlement)" }
+                    ]
+                  },
+                  {
+                    content: "Industrial Use Cases &amp; Quantified Gains",
+                    children: [
+                      { content: "Aerospace: 100% Part Traceability &amp; +45% Aftermarket Asset Value" },
+                      { content: "Supply Chain: Provenance Tracking Cut from 7 Days to 2.2 s (Walmart)" },
+                      { content: "2030 Metrics: 90% Audit Efficiency &bull; -55% Audit Time &bull; -20% Defects" },
+                      { content: "4 Best Practices: Pilot ROI, Ecosystem Onboarding, Hybrid Governance, Risk Mitigation" }
+                    ]
+                  }
+                ]
+              },
+              {
+                content: "Simulation-Driven AM, XR &amp; Tech Maturity",
+                children: [
+                  { content: "Topology Synthesis: CAD Envelope &rarr; FEA Load Paths &rarr; Bionic AM (-68% Mass)" },
+                  { content: "Extended Reality (VR/AR): Spatial Digital Twins, Turbomachinery QA &amp; Operator Training" },
+                  { content: "Technology Maturity Cycle: DNA Storage &rarr; Bio-BMS &rarr; Agentic AI in CAD &rarr; XR Twins" }
+                ]
+              }
+            ]
+          },
+          {
+            content: "<strong>3. Biological Manufacturing Systems (BMS) &amp; SMA</strong>",
+            children: [
+              {
+                content: "Biologicalisation in Manufacturing <span class='node-tag node-tag-amber'>CIRP</span>",
+                children: [
+                  { content: "DNA-Type Information: Inheritable Generative Product Genomes (Ueda et al.)" },
+                  { content: "BN-Type (Brain-Nervous) Control: Self-Organizing &amp; Self-Healing Swarm Cells" },
+                  { content: "Morphogenesis: Structural Growth Along Principal Stress Trajectories" }
+                ]
+              },
+              {
+                content: "Slime Mould Algorithm (SMA) &amp; Optimization",
+                children: [
+                  { content: "Inspiration: <em>Physarum polycephalum</em> Fault-Tolerant Vascular Pathfinding" },
+                  { content: "Mathematical Model: Global Exploration, Bio-Wave Search (W) &amp; Local Exploitation" },
+                  { content: "Hybrid Variants: CCHSMA (Chaotic-Competitive + CMA-ES/HHO) &amp; RCLSMAOA" },
+                  { content: "Mechanical Benchmarks: Welded Beam, Pressure Vessel, Gear Train &amp; 3-Bar Truss" }
+                ]
+              },
+              {
+                content: "SMA in 3D Additive Design: PIX Moving &amp; WAAM",
+                children: [
+                  { content: "Bionic Autonomous Vehicle Chassis via Wire Arc Additive Manufacturing (WAAM)" },
+                  { content: "Industrial Impact: <strong>-60% Manufacturing Cost</strong> &amp; <strong>-75% Lead-Time</strong>" },
+                  { content: "R&amp;D Roadmap: Multi-Objective Pareto SMA (MOSMA) &amp; Physics-Informed AI Surrogates" }
+                ]
+              }
+            ]
+          },
+          {
+            content: "<strong>4. Intelligent Manufacturing Systems (IMS) &amp; Gen. Design</strong>",
+            children: [
+              {
+                content: "Cyber-Physical Production Systems (CPPS)",
+                children: [
+                  { content: "Physical Layer: Robotic Cells, 5-Axis CNC/Metal AM &amp; Autonomous AMR Fleets" },
+                  { content: "Edge Middleware: OPC-UA, MQTT &amp; Node-RED Real-Time Control" },
+                  { content: "AI Cognitive Layer: Closed-Loop Quality Assurance &amp; Autonomous Reconfiguration" }
+                ]
+              },
+              {
+                content: "Cloud Manufacturing &amp; Blocktrust",
+                children: [
+                  { content: "Virtualized Capability Pool (Metal AM, Multi-Axis CNC, Metrology, CAE)" },
+                  { content: "Blocktrust Smart-Contract Layer: Pay-As-You-Go SLA Verification (Barenji, 2021)" }
+                ]
+              },
+              {
+                content: "Node-RED &amp; Mobile WebApp CNC Digital Twin",
+                children: [
+                  { content: "Bidirectional Architecture: HTML5/WebGL PWA &harr; Edge WSS/REST &harr; Virtual/Physical CNC" },
+                  { content: "Mobile HMI Views: Live 2.5D XY Toolpath DRO &amp; Spindle Power P<sub>c</sub>(t) Telemetry" },
+                  { content: "Event-Driven Simulation Loop: Soft-Limit Poka-Yoke Guard, Feed Overrides &amp; E-Stop Retract" }
+                ]
+              },
+              {
+                content: "Generative Design Approach",
+                children: [
+                  { content: "AI/Bio-Algorithmic Synthesis vs. Manual Classic CAD Iteration" },
+                  { content: "Evaluation Loop: Constraints &rarr; Rule-Set Algorithm &rarr; Convergence &rarr; Validated AM" },
+                  { content: "Aerospace &amp; Robotics: Airbus Bionic Brackets (-45–55% Mass) &amp; End-Effector (142g &rarr; 94g)" }
+                ]
+              }
+            ]
+          },
+          {
+            content: "<strong>5. State of the Art Synthesis (2023&ndash;2026)</strong> <span class='node-tag node-tag-red'>NEW</span>",
+            children: [
+              {
+                content: "1/5: Bio-Inspired Innovation &amp; Convergent Mfg. (Malshe et al., 2023)",
+                children: [
+                  { content: "3 Survival Pillars: Multifunctionality, Resilience &amp; Frugality (&ge;10&times; Resource Cut)" },
+                  { content: "ISO 18458 Mimicry Classes 1&ndash;4: Trabecular Bone Morphogenesis (-57% Contact Pressure)" },
+                  { content: "Convergent Manufacturing Pyramid: Point-of-Need (PoN) In-Space, Cellular &amp; Bio-AM" }
+                ]
+              },
+              {
+                content: "2/5: Bio-Intelligent Mfg. &amp; SME 5.0 (Emer et al., 2025)",
+                children: [
+                  { content: "PRISMA SLR (79 &rarr; 11 Core Studies): Categorizes 13 Industrial Applications" },
+                  { content: "Narrow View (Bio-Integrated + AI) vs. Broader View (Bio-Inspired + AI)" },
+                  { content: "High SME Fit: Adaptive CNC Milling, CNN-SLM, Robot Swarms, Aquaponics &amp; Waste-to-X" }
+                ]
+              },
+              {
+                content: "3/5: PDEVS Blockchain Factory Evaluation (Mullet et al., 2026)",
+                children: [
+                  { content: "2-Level Parallel-DEVS Simulation (Artis* C++/JSON) + MultiChain BPCAT" },
+                  { content: "Off-Chain Delta Storage Cuts Validator Volume by <strong>-79%</strong> (74.36 GB &rarr; 15.60 GB)" },
+                  { content: "Round-Robin (nPoW) Uses <strong>&gt;5.3&times; Less Energy</strong> than PoW (0.27 vs. 1.71 kWh/day)" }
+                ]
+              },
+              {
+                content: "4/5: Foundations of Design for Biointelligence (Sonnenberg et al., 2026)",
+                children: [
+                  { content: "Gioia Grounded Theory (17 Experts, &kappa; = 0.846) for Hardware + Software + Bioware" },
+                  { content: "5 Challenge Dimensions: n=1 Cell Variance, DBTL Gaps, Interdisciplinarity, Data Silos, Governance" },
+                  { content: "24 DfB Heuristics: AI Surrogates, Continuous Lab Automation, SysML &amp; Boundary Spanners" }
+                ]
+              },
+              {
+                content: "5/5: Cross-Paper &amp; Lecture Synergy Matrix",
+                children: [
+                  { content: "Bio-Heuristics (Sec. 1) &oplus; Trusted DLT/IIoT (Sec. 2) &oplus; BMS/Bionic AM (Sec. 3&ndash;4) &oplus; SME Skills (Sec. 6)" }
+                ]
+              }
+            ]
+          },
+          {
+            content: "<strong>6. Projects, Dual Education System &amp; Start-ups</strong>",
+            children: [
+              {
+                content: "DYNAMIC Dual Engineering Project (Holcim Koromačno)",
+                children: [
+                  { content: "On-Site Mentorship: 3D CAD of Silos, Rotary Kilns, Cement Mills &amp; Robotic Palletizers" },
+                  { content: "Interactive VR &amp; HoloLens 2 Plant Digital Twin for Vocational Training" }
+                ]
+              },
+              {
+                content: "3D4VR European Innovative Teaching Award",
+                children: [
+                  { content: "Tactile 3D Additive Models (Pula Arena for Visually Impaired) + Immersive VR VET" },
+                  { content: "Fusion 360 Lifecycle Time Share: CAD 50% &bull; FEM 15% &bull; Gen. Design 15% &bull; CAM/AM 12%" }
+                ]
+              },
+              {
+                content: "Graph-Based Design Languages &amp; UAV Optimization",
+                children: [
+                  { content: "Digital Product Representation (DiP): Automated Bonnet Geometry Synthesis" },
+                  { content: "UAV Frame Generative Optimization: Mass 750 g &rarr; 586 g (-22%, Safety Factor 3.03)" }
+                ]
+              },
+              {
+                content: "Start-up Initiatives &amp; Engineering Agility",
+                children: [
+                  { content: "Hardware-in-the-Loop Iteration Velocity vs. Administrative Over-Regulation" },
+                  { content: "Smart Regulatory Sandboxes for Aerospace, Mobility &amp; Bio-Mfg. Breakthroughs" }
+                ]
+              }
+            ]
+          }
+        ]
+      };
+
+      // ========================================================================
+      // FH JOANNEUM Branch Color Palette Mapping (Deterministic by Top Chapter)
+      // ========================================================================
+      const chapterColors = [
+        "#195FA5", // Sec 1: Accent Blue
+        "#00877D", // Sec 2: Accent Teal
+        "#D27D0A", // Sec 3: Accent Amber
+        "#4F46E5", // Sec 4: Indigo
+        "#C8102E", // Sec 5: SOTA FH Red
+        "#475569"  // Sec 6: Slate Dark
+      ];
+
+      // Tag every node with its exact tree depth and chapter color index upfront
+      function annotateTree(node, depth = 0, chapterIdx = -1) {
+        node._depth = depth;
+        node._chapterIdx = chapterIdx;
+        if (!node.payload) {
+          // Show root (depth 0) + first layer 1-6 chapters (fold at depth >= 1)
+          node.payload = { fold: depth >= 1 ? 1 : 0 };
+        }
+        if (Array.isArray(node.children)) {
+          node.children.forEach((child, idx) => {
+            const nextChapter = depth === 0 ? idx : chapterIdx;
+            annotateTree(child, depth + 1, nextChapter);
+          });
+        }
+      }
+      annotateTree(mindmapData);
+
+      function getNodeColor(node) {
+        const raw = node && node.data ? node.data : node;
+        const depth = typeof node.depth === "number" ? node.depth : (raw && raw._depth ? raw._depth : 0);
+        if (depth === 0) return "#C8102E";
+        const cIdx = raw && typeof raw._chapterIdx === "number" && raw._chapterIdx >= 0
+          ? raw._chapterIdx % chapterColors.length
+          : 0;
+        return chapterColors[cIdx];
+      }
+
+      // ========================================================================
+      // Initialize Markmap Instance & Toolbar
+      // ========================================================================
+      const { markmap } = window;
+      const svgEl = document.querySelector("#mindmap");
+
+      const options = markmap.deriveOptions({
+        color: getNodeColor,
+        duration: 350,
+        maxWidth: 340,
+        spacingVertical: 10,
+        spacingHorizontal: 90,
+        paddingX: 14,
+        fitRatio: 0.86,
+        autoFit: true
+      });
+
+      const mm = markmap.Markmap.create(svgEl, options, mindmapData);
+      window.mm = mm;
+
+      function fitMindmap() {
+        if (mm && typeof mm.fit === "function") {
+          mm.fit();
+        }
+      }
+
+      // Allow tapping/clicking directly on the topic text/label (or circle) to toggle branch,
+      // while distinguishing a tap from a pan/drag gesture on mobile & desktop.
+      let pointerStart = null;
+
+      svgEl.addEventListener("pointerdown", (e) => {
+        pointerStart = { x: e.clientX, y: e.clientY };
+      }, { passive: true });
+
+      svgEl.addEventListener("click", (e) => {
+        // Ignore if user dragged/panned the canvas
+        if (pointerStart) {
+          const dist = Math.hypot(e.clientX - pointerStart.x, e.clientY - pointerStart.y);
+          if (dist > 8) return;
+        }
+
+        // Ignore clicks on links inside labels if any exist
+        if (e.target.closest("a")) return;
+
+        const nodeGroup = e.target.closest(".markmap-node");
+        if (!nodeGroup) return;
+
+        // If the user tapped the text label instead of the tiny circle, toggle the node
+        const clickedCircle = e.target.closest("circle");
+        if (!clickedCircle) {
+          const d3Node = d3.select(nodeGroup).datum();
+          if (d3Node && d3Node.data && Array.isArray(d3Node.data.children) && d3Node.data.children.length > 0) {
+            mm.toggleNode(d3Node.data);
+          }
+        }
+
+        setTimeout(fitMindmap, 380);
+      });
+
+      // Attach Markmap Floating Toolbar (Bottom-Right)
+      if (markmap && markmap.Toolbar) {
+        const toolbar = markmap.Toolbar.create(mm);
+        if (typeof toolbar.setBrand === "function") {
+          toolbar.setBrand(false);
+        }
+        toolbar.el.setAttribute("style", "position:fixed;bottom:20px;right:20px;z-index:110;");
+        document.body.appendChild(toolbar.el);
+      }
+
+      setTimeout(fitMindmap, 150);
+
+      // ========================================================================
+      // Interactive Tree Helpers: Expand All, Collapse to Chapters, Search
+      // ========================================================================
+      function walkTree(node, callback) {
+        callback(node);
+        if (Array.isArray(node.children)) {
+          node.children.forEach((child) => walkTree(child, callback));
+        }
+      }
+
+      function applyFoldDepth(targetDepth) {
+        walkTree(mindmapData, (n) => {
+          n.payload = Object.assign({}, n.payload, {
+            fold: (n._depth || 0) >= targetDepth ? 1 : 0
+          });
+        });
+        mm.setData(mindmapData);
+        setTimeout(fitMindmap, 380);
+      }
+
+      document.getElementById("btnExpand").addEventListener("click", (e) => {
+        e.preventDefault();
+        applyFoldDepth(99);
+      });
+
+      document.getElementById("btnCollapse").addEventListener("click", (e) => {
+        e.preventDefault();
+        applyFoldDepth(1);
+      });
+
+      document.getElementById("btnFit").addEventListener("click", (e) => {
+        e.preventDefault();
+        fitMindmap();
+      });
+
+      // Live Search & Auto-Expand Matching Branches
+      const searchInput = document.getElementById("mindmapSearch");
+      let searchTimer = null;
+
+      function stripTags(html) {
+        const tmp = document.createElement("div");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+      }
+
+      function filterAndHighlight(node, query) {
+        if (!node._rawContent) {
+          node._rawContent = node.content;
+        }
+        const plainText = stripTags(node._rawContent);
+        let selfMatches = false;
+
+        if (!query) {
+          node.content = node._rawContent;
+        } else {
+          const idx = plainText.toLowerCase().indexOf(query);
+          if (idx !== -1) {
+            selfMatches = true;
+            const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const regex = new RegExp(`(${escaped})(?![^<]*>)`, "gi");
+            node.content = node._rawContent.replace(regex, "<span class='search-match'>$1</span>");
+          } else {
+            node.content = node._rawContent;
+          }
+        }
+
+        let childMatches = false;
+        if (Array.isArray(node.children) && node.children.length > 0) {
+          node.children.forEach((child) => {
+            if (filterAndHighlight(child, query)) {
+              childMatches = true;
+            }
+          });
+        }
+
+        const depth = node._depth || 0;
+        node.payload = Object.assign({}, node.payload, {
+          fold: !query
+            ? (depth >= 1 ? 1 : 0)
+            : ((selfMatches || childMatches) ? 0 : 1)
+        });
+
+        return selfMatches || childMatches;
+      }
+
+      searchInput.addEventListener("input", (e) => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+          const q = e.target.value.trim().toLowerCase();
+          filterAndHighlight(mindmapData, q);
+          mm.setData(mindmapData);
+          setTimeout(fitMindmap, 380);
+        }, 180);
+      });
+
+      window.addEventListener("resize", fitMindmap);
+    })();
+  </script>
+</body>
+</html>
